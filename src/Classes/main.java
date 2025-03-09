@@ -4,6 +4,10 @@
  */
 package Classes;
 
+import DataStructures.List;
+import GUI.Inicio;
+import GUI.mainview;
+
 /**
  *
  * @author luciano
@@ -15,13 +19,8 @@ public class main {
      */
     public static void main(String[] args) { //Probando
         // TODO code application logic here
-        File archivo = new File("Hola", "texto");
-        System.out.println(archivo.getName() +"\n" + archivo.getContent());
-        archivo.setName("Adios");
-        archivo.setContent("nada");
-        File previousFile = archivo.getbackup(0); //Saca el backup
-        System.out.println(previousFile.getName() + " Version anterior del archivo antes del cambio de nombre"+ "\nTipo de cambio:" + previousFile.getTipoCambio());
-        System.out.println(archivo.getName() + " Version actual");
+        new Inicio().setVisible(true);
+        
     }
     
 }

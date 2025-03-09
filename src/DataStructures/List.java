@@ -214,6 +214,44 @@ public class List<T> {
         return null;
     }
     
+            /***
+     * Elimina elementos de una lista de strings dado una string
+     * @param string indice del elemento a eliminar
+     * @return retorna el elemento eliminado                             
+     */
+    public T popString(String string){ //Solo funciona para listas de String
+        if(isEmpty()){
+            System.err.println("List error: Empty list");
+        }
+        else{
+            int size = this.size;
+            for (int i = 0; i < this.size   ; ) { //agarra la primera fila y va eliminado los elementos que se encuentran en esta
+                System.out.println(this.get(i));
+                if(this.get(i).equals(string)){
+                    
+                    this.pop(i);
+                    
+                }
+                else{ //Si la primera fila ya ha sido eliminada y el elemento es diferente al introducido pasa aa la siguiente. 
+                    i++;
+                }
+                
+                
+                
+        }
+            //Esto es innecesario y puede ser borrado.
+        if(this.head.getData().equals(string)){
+                 System.out.println("execute");
+                 removeHead();
+            }
+         if(this.getTail().getData().equals(string)){
+                 removeTail();
+            }
+        
+    }
+        return null;
+    }
+    
     /***
      * Obtiene el elemento de la lista dado el indice
      * @param idx indice del elemento a obtener
@@ -318,11 +356,52 @@ public class List<T> {
         }
         return listStr;
     }
+
+    public int FindString(String string){ //Solo funciona para listas de String
+        if(isEmpty()){
+            System.err.println("List error: Empty list");
+        }
+        else{
+            int size = this.size;
+            for (int i = 0; i < this.size   ; ) { //agarra la primera fila y va buscando los elementos que se encuentran en esta
+                System.out.println(this.get(i));
+                if(this.get(i).equals(string)){
+                    return i;
+                }
+                else{ //pasa aa la siguiente. 
+                    i++;
+                }
+                
+                
+                
+        }
+        }
+        return 0;
+        
+    }
     
-    
-    
-    
-    
-    
-    
+    public T ChangeString(String string, String cambiar){ //Solo funciona para listas de String
+        if(isEmpty()){
+            System.err.println("List error: Empty list");
+        }
+        else{
+            int size = this.size;
+            Node<T> pointer = this.head;
+            for (int i = 0; i < size   ; i++) { //agarra la primera fila y va eliminado los elementos que se encuentran en esta
+                
+                if(pointer.getData().toString().equals(string)){
+                    System.out.println("afirmativo");
+                    pointer.setData((T) cambiar);
+                   
+                }
+                else{ //Si la primera fila ya ha sido eliminada y el elemento es diferente al introducido pasa aa la siguiente. 
+                    
+                    
+                }
+                pointer = pointer.getNext();
+                
+                
+        }
+        }return null;
+}
 }

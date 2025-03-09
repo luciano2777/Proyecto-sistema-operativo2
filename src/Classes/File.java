@@ -13,21 +13,26 @@ import DataStructures.List;
 public class File {
     
     private String name;
+    private int size;
     private String content;
+    //Tipo de cambio es para ver el tipo de cambio que se ha hecho a un file.
     private String TipoCambio;
     //Backup será una lista que contendra los anteriores snapshots del file
     private List<File> backup;
     
-    public File(String name, String content) {
+    public File(String name, int size) {
         this.name = name;
-        this.content = content;
         this.backup = new List();
-        
+        this.size = size;
                 
     }
     
     public String getName() {
         return name;
+    }
+    
+        public int getSize() {
+        return size;
     }
 
     public void setName(String name) {
@@ -50,12 +55,12 @@ public class File {
     }
     
     public void Savetobackup(String Tipo) {
-        File archivo = new File(this.name,this.content);
+        File archivo = new File(this.name,this.size);
         archivo.TipoCambio = Tipo;
         backup.append(archivo);
     }
     
-    public String getTipoCambio() {
+    public String getTipoCambio() { 
         return TipoCambio;
     }
     
