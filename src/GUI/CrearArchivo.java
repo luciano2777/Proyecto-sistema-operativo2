@@ -4,17 +4,42 @@
  */
 package GUI;
 
+import Classes.File;
+import static GUI.mainview.EspacioDisponible;
+import static GUI.mainview.globalLists;
+import javax.swing.JOptionPane;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
+
 /**
  *
  * @author luciano
  */
 public class CrearArchivo extends javax.swing.JFrame {
 
+    public static String namefile;
+    public static TreeSelectionModel smd;
+    public static DefaultMutableTreeNode selectedNode;
+    public static DefaultTreeModel model;
+
     /**
      * Creates new form CrearArchivo
      */
-    public CrearArchivo() {
+    public CrearArchivo(DefaultMutableTreeNode selectedNode, DefaultTreeModel model) {
         initComponents();
+        this.selectedNode = selectedNode;
+        this.model = model;
+
+    }
+
+    public void AgregarJtree(DefaultMutableTreeNode selectedNode, DefaultTreeModel model) { //Añade un nuevo nodo la Jtree.
+        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(namefile);
+        selectedNode.add(newNode);
+
+        System.out.println();
+        model.reload();
+
     }
 
     /**
@@ -28,11 +53,11 @@ public class CrearArchivo extends javax.swing.JFrame {
 
         jTextField2 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        Titulo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        Crear = new javax.swing.JButton();
+        size = new javax.swing.JTextField();
+        MedidorEspacio = new javax.swing.JLabel();
 
         jTextField2.setText("jTextField1");
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
@@ -45,64 +70,98 @@ public class CrearArchivo extends javax.swing.JFrame {
 
         jLabel1.setText("Titulo");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        Titulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                TituloActionPerformed(evt);
             }
         });
 
-        jLabel2.setText("Contenido");
+        jLabel2.setText("Tamaño");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        Crear.setText("Crear");
+        Crear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CrearActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Crear");
+        MedidorEspacio.setText("Bloques Disponibles: "+ EspacioDisponible);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(Titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(size))
+                .addContainerGap(119, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
-                        .addComponent(jButton1)))
-                .addContainerGap(152, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(Crear)
+                        .addGap(90, 90, 90))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(MedidorEspacio)
+                        .addGap(105, 105, 105))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(30, 30, 30)
+                .addComponent(MedidorEspacio)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(Titulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(22, 22, 22))
+                .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addComponent(Crear)
+                .addGap(50, 50, 50))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void TituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TituloActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_TituloActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void CrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearActionPerformed
+        // TODO add your handling code here:
+        try{
+           //Esta parte es solamente para asegurarse que los datos sean los coincidan con el archivo
+              if(0>EspacioDisponible - Integer.valueOf(size.getText())){int dsa = 1/0;} //Divide entre 0 si es un numero negativo para ocasionar un excepcion, si es menor de 0 no hay espacio.
+        namefile = Titulo.getText();
+   
+        File archivo = new File(Titulo.getText(), Integer.valueOf(size.getText())); //Extrae los Jtextfields
+        System.out.println(archivo.getName() + archivo.getSize());
+        globalLists.ListaFile.append(archivo);
+        for (int i = 0; i < archivo.getSize(); i++) { //Mete a la GetListasSD
+            globalLists.GetListaSD().append(archivo.getName());
+        }
+        AgregarJtree(selectedNode, model); //Actualiza el Jtree
+        EspacioDisponible -=Integer.valueOf(size.getText()); // Baja el espacio de memoria
+        MedidorEspacio.setText(String.valueOf("Bloques Disponibles: "+ EspacioDisponible));
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Por favor introduzca un numero valido.",
+               "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+        
+    }//GEN-LAST:event_CrearActionPerformed
 
     /**
      * @param args the command line arguments
@@ -134,18 +193,18 @@ public class CrearArchivo extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CrearArchivo().setVisible(true);
+                new CrearArchivo(selectedNode, model).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton Crear;
+    private javax.swing.JLabel MedidorEspacio;
+    private javax.swing.JTextField Titulo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField size;
     // End of variables declaration//GEN-END:variables
 }
