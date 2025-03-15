@@ -69,11 +69,11 @@ public class MainView extends javax.swing.JFrame {
     private void init(){
         initComponents();
         
-        ImageIcon appIcon = new ImageIcon("src\\Assets\\fileSystemIcon.png");
+        ImageIcon appIcon = new ImageIcon("./src/Assets/fileSystemIcon.png");
         setIconImage(appIcon.getImage());
 
-        ImageIcon createIcon = new ImageIcon("src\\Assets\\plus.png");
-        ImageIcon deleteIcon = new ImageIcon("src\\Assets\\minus.png");
+        ImageIcon createIcon = new ImageIcon("./src/Assets/plus.png");
+        ImageIcon deleteIcon = new ImageIcon("./src/Assets/minus.png");
 
         Image createImage = createIcon.getImage();
         Image scaledImage = createImage.getScaledInstance((int)(create.getWidth()), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);
@@ -106,6 +106,7 @@ public class MainView extends javax.swing.JFrame {
         create = new javax.swing.JButton();
         delete = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -149,6 +150,9 @@ public class MainView extends javax.swing.JFrame {
 
         jTextField1.setBackground(new java.awt.Color(0, 20, 50));
         jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
+
+        jLabel1.setText("jLabel1");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -227,6 +231,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JTree JTree;
     private javax.swing.JButton create;
     private javax.swing.JButton delete;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
