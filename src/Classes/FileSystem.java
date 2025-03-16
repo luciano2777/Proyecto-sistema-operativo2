@@ -107,32 +107,65 @@ public class FileSystem {
     
     
     
-    public void createFile(String name, int size, String parentPathDirectory){
+    public String createFile(String name, int size, String parentPathDirectory){
         Directory parentDirectory = getDirectory(parentPathDirectory);
         
         Block firstBlock = assignBlock(size);
         
-        if(firstBlock == null){
-            System.out.println("No se pudo crear el bloque");
-            return;
+        if(firstBlock == null){            
+            return "No hay espacio disponible en el dispositivo de almacenamiento";
         }
                 
         JFile newFile = new JFile(name, size, firstBlock);  
         parentDirectory.addFile(newFile);
+        return "Archivo creado exitosamente";
     }
     
     
+    public String deleteFile(String path){
+        String fileToDelete = path.split("/")[path.split("/").length-1];
+        if(!fileToDelete.contains(".file")){            
+            return "Ruta no valida";
+        }
+                
+        Directory directory = getDirectory(path);
+        
+        List<JFile> files = directory.getFiles();
+        
+        for (int i = 0; i < files.getSize(); i++) {
+            JFile file = files.get(i);
+            if(file.getName().equals(fileToDelete)){
+                Block block = file.getFirstBlock();
+                
+                while(block != null){
+                    block.setAvaible(true);
+                    
+                    if(block.getNext() == null){
+                        block = null;
+                    }
+                    else{
+                        block = SD[block.getNext()];                        
+                    }                    
+                }
+                
+                files.pop(i);
+            }
+        }
+        return "Archivo borrado exitosamente";
+    }
     
-    public void createDirectory(String name, String parentPathDirectory){
+    
+    public String createDirectory(String name, String parentPathDirectory){
         Directory parentDirectory = getDirectory(parentPathDirectory);
         
-        if(parentDirectory == null){
-            System.out.println("Ruta no valida");
-            return;
+        if(parentDirectory == null){            
+            return "Ruta no valida";
         }
         
         Directory newDirectory = new Directory(name);                
         parentDirectory.getDirectories().append(newDirectory);
+        
+        return "Directorio creado exitosamente";
     }
     
 
@@ -162,6 +195,8 @@ public class FileSystem {
         
         return currentDirectory;         
     }
+    
+        
     
     
     

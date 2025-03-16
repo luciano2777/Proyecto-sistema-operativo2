@@ -49,12 +49,10 @@ public class TreeRender extends DefaultTreeCellRenderer{
 
         File file = new File(path); // Crear un objeto File a partir de la ruta
 
-        if(file.getName().contains(".file")){
-            System.out.println("file");
+        if(file.getName().contains(".file")){            
             setIcon(fileIcon);
         } 
-        else{
-            System.out.println("dir");
+        else{            
             setIcon(dirIcon);
         }
         
