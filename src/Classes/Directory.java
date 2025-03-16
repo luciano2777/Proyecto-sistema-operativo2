@@ -13,7 +13,7 @@ import DataStructures.List;
 public class Directory {
     private String name;
     private Directory parent;    
-    private List<File> files;
+    private List<JFile> files;
     private List<Directory> directories;    
 
     public Directory(String name, Directory parent) {
@@ -38,11 +38,11 @@ public class Directory {
         this.name = name;
     }
 
-    public List<File> getFiles() {
+    public List<JFile> getFiles() {
         return files;
     }
 
-    public void setFiles(List<File> files) {
+    public void setFiles(List<JFile> files) {
         this.files = files;
     }
 
@@ -54,7 +54,7 @@ public class Directory {
         this.directories = directories;
     }
     
-    public void addFile(File file){
+    public void addFile(JFile file){
         this.files.append(file);
     }
     
@@ -69,6 +69,13 @@ public class Directory {
     public void setParent(Directory parent) {
         this.parent = parent;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+    
+    
     
     
     

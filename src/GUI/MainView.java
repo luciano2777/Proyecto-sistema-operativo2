@@ -9,6 +9,7 @@ import Assets.RightButtonBorder;
 import Assets.TreeRender;
 import Classes.Directory;
 import Classes.FileSystem;
+import Classes.JFile;
 import DataStructures.List;
 import DataStructures.Queue;
 import java.awt.Color;
@@ -64,7 +65,10 @@ public class MainView extends javax.swing.JFrame {
         nodeQueue.enqueue(rootNode);
                 
         while(!dirQueue.isEmpty()){
-            List<Directory> currentDirectories = dirQueue.dequeue().getDirectories();
+            Directory currentDirectory = dirQueue.dequeue();
+            
+            List<Directory> currentDirectories = currentDirectory.getDirectories();
+            List<JFile> currentFiles = currentDirectory.getFiles();
             DefaultMutableTreeNode currentNode = nodeQueue.dequeue();
             
             for (int i = 0; i < currentDirectories.getSize(); i++) {
@@ -75,7 +79,14 @@ public class MainView extends javax.swing.JFrame {
                 
                 dirQueue.enqueue(directory);
                 nodeQueue.enqueue(newNode);
-            }            
+            }  
+            
+            for (int i = 0; i < currentFiles.getSize(); i++) {
+                JFile file = currentFiles.get(i);
+                                
+                DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(file.getName());
+                currentNode.add(newNode);
+            }
         }
         
         

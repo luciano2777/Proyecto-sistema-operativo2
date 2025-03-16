@@ -12,7 +12,7 @@ import DataStructures.List;
  */
 public class FileSystem {
     private Block[] SD;
-    private List<File> Files;
+    private List<JFile> Files;
     private Directory root;
 
     public FileSystem(int SDsize) {
@@ -33,11 +33,11 @@ public class FileSystem {
         this.SD = SD;
     }
 
-    public List<File> getFiles() {
+    public List<JFile> getFiles() {
         return Files;
     }
 
-    public void setFiles(List<File> Files) {
+    public void setFiles(List<JFile> Files) {
         this.Files = Files;
     }
 
@@ -117,7 +117,7 @@ public class FileSystem {
             return;
         }
                 
-        File newFile = new File(name, size, firstBlock);  
+        JFile newFile = new JFile(name, size, firstBlock);  
         parentDirectory.addFile(newFile);
     }
     
@@ -162,6 +162,8 @@ public class FileSystem {
         
         return currentDirectory;         
     }
+    
+    
     
     
     

@@ -10,15 +10,15 @@ import DataStructures.List;
  *
  * @author Juan
  */
-public class File {
+public class JFile {
     private String name;     
     private String path;
     private int size;    
     private Block firstBlock;    
-    private List<File> backup;
+    private List<JFile> backup;
 
-    public File(String name, int size, Block firstBlock) {
-        this.name = name;        
+    public JFile(String name, int size, Block firstBlock) {
+        this.name = name + ".file";        
         this.size = size;
         this.firstBlock = firstBlock;
         this.backup = new List();
@@ -40,11 +40,11 @@ public class File {
         this.size = size;
     }
 
-    public List<File> getBackup() {
+    public List<JFile> getBackup() {
         return backup;
     }
 
-    public void setBackup(List<File> backup) {
+    public void setBackup(List<JFile> backup) {
         this.backup = backup;
     }
 
@@ -56,7 +56,10 @@ public class File {
         this.firstBlock = firstBlock;
     }
     
-    
+    @Override
+    public String toString() {
+        return name;
+    }
     
     
     

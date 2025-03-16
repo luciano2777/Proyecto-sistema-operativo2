@@ -38,10 +38,10 @@ public class TreeRender extends DefaultTreeCellRenderer{
         Image scaledDirImage = dirImage.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         dirIcon = new ImageIcon(scaledDirImage);
         
-        ImageIcon fileIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"file.png").normalize().toString());
+        ImageIcon fileIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"fileText.png").normalize().toString());
         Image fileImage = fileIcon.getImage();
         Image scaledFileImage = fileImage.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
-        fileIcon = new ImageIcon(scaledDirImage);
+        fileIcon = new ImageIcon(scaledFileImage);
                 
         
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
@@ -49,11 +49,13 @@ public class TreeRender extends DefaultTreeCellRenderer{
 
         File file = new File(path); // Crear un objeto File a partir de la ruta
 
-        if(file.isDirectory()){
-            setIcon(dirIcon);
+        if(file.getName().contains(".file")){
+            System.out.println("file");
+            setIcon(fileIcon);
         } 
         else{
-            setIcon(fileIcon);
+            System.out.println("dir");
+            setIcon(dirIcon);
         }
         
         return this;
