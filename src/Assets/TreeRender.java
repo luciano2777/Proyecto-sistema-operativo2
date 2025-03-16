@@ -7,6 +7,7 @@ package Assets;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.io.File;
+import java.nio.file.Paths;
 
 /**
  *
@@ -31,12 +32,13 @@ public class TreeRender extends DefaultTreeCellRenderer{
             setBackgroundNonSelectionColor(new Color(0, 15, 36));
         }
         
-        ImageIcon dirIcon = new ImageIcon("src\\Assets\\file.png");
+        String sp = File.separator;
+        ImageIcon dirIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"file.png").normalize().toString());
         Image dirImage = dirIcon.getImage();
         Image scaledDirImage = dirImage.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         dirIcon = new ImageIcon(scaledDirImage);
         
-        ImageIcon fileIcon = new ImageIcon("src\\Assets\\fileText.png");
+        ImageIcon fileIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"file.png").normalize().toString());
         Image fileImage = fileIcon.getImage();
         Image scaledFileImage = fileImage.getScaledInstance(25, 25, Image.SCALE_SMOOTH);
         fileIcon = new ImageIcon(scaledDirImage);

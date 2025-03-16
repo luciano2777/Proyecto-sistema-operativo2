@@ -5,6 +5,8 @@
 package Classes;
 
 import GUI.MainView;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -20,13 +22,16 @@ public class Main {
         
 //        FileSystem fs = new FileSystem(10);
 //        fs.createDirectory("d1", "root");
+//        fs.createFile("File1", 3, "root/d1");
+//        System.out.println(fs.getRoot().getDirectories().get(0).getFiles().get(0).getName());
         
         
         
         MainView mv = new MainView(10);
         mv.setVisible(true);
+
         
-        
+
         
     }
     
