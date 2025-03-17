@@ -249,7 +249,7 @@ public class FileSystem {
             }
         }
         
-        Directory newDirectory = new Directory(name, parentDirectory);         
+        Directory newDirectory = new Directory(name, parentPathDirectory);         
         parentDirectory.getDirectories().append(newDirectory);
         
         return "Directorio creado exitosamente";
@@ -285,13 +285,11 @@ public class FileSystem {
     
     
     public String deleteDirectory(String path){
-        Directory directory = getDirectory(path);
-        
-        System.out.println(directory.getName());
-        if(directory.getParent() == null){
+        if(path.equals("root/")){            
             return "No se puede eliminar el directorio raiz";
         }
         
+        Directory directory = getDirectory(path);                        
         if(directory == null){
             return "Ruta de directorio no valida";            
         }
@@ -321,7 +319,7 @@ public class FileSystem {
         directory.getDirectories().delete();
         
         //Borrar directorio
-        List<Directory> parentDirectories = directory.getParent().getDirectories();
+        List<Directory> parentDirectories = getDirectory(directory.getParentPath()).getDirectories();
         
         for (int i = 0; i < parentDirectories.getSize(); i++) {
             if(parentDirectories.get(i).getName().equals(directory.getName())){
@@ -345,7 +343,7 @@ public class FileSystem {
         }
                 
         Directory directory = getDirectory(path);
-        List<Directory> directories = directory.getParent().getDirectories();
+        List<Directory> directories = getDirectory(directory.getParentPath()).getDirectories();
         
         for (int i = 0; i < directories.getSize(); i++) {
             Directory auxDirectory = directories.get(i);

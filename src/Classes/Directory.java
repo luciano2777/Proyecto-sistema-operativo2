@@ -12,20 +12,20 @@ import DataStructures.List;
  */
 public class Directory {
     private String name;
-    private Directory parent;    
+    private String parentPath;    
     private List<JFile> files;
     private List<Directory> directories;    
 
-    public Directory(String name, Directory parent) {
+    public Directory(String name, String parentPath) {
         this.name = name;
-        this.parent = parent;
+        this.parentPath = parentPath;
         this.files = new List();
         this.directories = new List();        
     }
     
     public Directory(String name) {
         this.name = name;
-        this.parent = null;
+        this.parentPath = null;
         this.files = new List();
         this.directories = new List();
     }
@@ -62,13 +62,15 @@ public class Directory {
         this.directories.append(directory);
     }
 
-    public Directory getParent() {
-        return parent;
+    public String getParentPath() {
+        return parentPath;
     }
 
-    public void setParent(Directory parent) {
-        this.parent = parent;
+    public void setParentPath(String parentPath) {
+        this.parentPath = parentPath;
     }
+
+    
 
     @Override
     public String toString() {

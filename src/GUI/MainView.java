@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
@@ -56,7 +57,11 @@ public class MainView extends javax.swing.JFrame {
         drawTree();        
     }
     
-   
+    public MainView(){
+        this.fileSystem = Util.load();
+        init();        
+        drawTree();
+    }
     
     
     public void drawTree(){
@@ -334,7 +339,7 @@ public class MainView extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         terminal = new javax.swing.JTextArea();
         leftPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        save = new javax.swing.JButton();
         edit = new javax.swing.JButton();
 
         createMenu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -429,9 +434,15 @@ public class MainView extends javax.swing.JFrame {
         leftPanel.setBackground(new java.awt.Color(0, 19, 66));
         leftPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setBackground(new java.awt.Color(243, 243, 243));
-        jButton1.setText("Guardar Cambios");
-        leftPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 130, 40));
+        save.setBackground(new java.awt.Color(243, 243, 243));
+        save.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        save.setText("Guardar Cambios");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
+        leftPanel.add(save, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 130, 40));
 
         jPanel1.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 540));
 
@@ -590,6 +601,14 @@ public class MainView extends javax.swing.JFrame {
         handleInput();
     }//GEN-LAST:event_editMouseClicked
 
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        try {
+            Util.save(fileSystem);
+        } catch (IOException ex) {
+            Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_saveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -633,12 +652,12 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JPopupMenu createMenu;
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel leftPanel;
     private javax.swing.JTextField pathOutput;
+    private javax.swing.JButton save;
     private javax.swing.JTextArea terminal;
     // End of variables declaration//GEN-END:variables
 
