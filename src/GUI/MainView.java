@@ -167,7 +167,7 @@ public class MainView extends javax.swing.JFrame {
                         deleteFile();
                     }
                     case DELETE_DIR -> {
-                        
+                        deleteDir();
                     }
                         
                 }
@@ -243,6 +243,31 @@ public class MainView extends javax.swing.JFrame {
         terminal.setText(result);
     }
     
+    
+    public void deleteDir(){
+        terminal.setEditable(false);
+        
+        terminal.setText("");                
+        String option = outputs.get(0);  
+        String path = pathOutput.getText();
+        outputs.delete();
+        
+        if(!option.toLowerCase().equals("y") && !option.toLowerCase().equals("n")){
+            terminal.setText("Entrada no valida");
+            return;
+        }
+        
+        if(option.toLowerCase().equals("n")){
+            terminal.setText("Operacion abortada");
+            return;
+        }
+        
+        String result = fileSystem.deleteDirectory(path);
+        drawTree();        
+        
+        terminal.setText(result);
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -300,6 +325,11 @@ public class MainView extends javax.swing.JFrame {
         deleteMenu.add(deleteFile);
 
         deleteDir.setText("Eliminar Directorio");
+        deleteDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteDirActionPerformed(evt);
+            }
+        });
         deleteMenu.add(deleteDir);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -510,6 +540,24 @@ public class MainView extends javax.swing.JFrame {
     private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
         deleteMenu.show(delete, 0, delete.getHeight());
     }//GEN-LAST:event_deleteMouseClicked
+
+    private void deleteDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDirActionPerformed
+        if(pathOutput.getText().contains(".file")){
+            terminal.setText("No se puede borrar en esta ruta");
+            return;
+        }
+        
+        instruction = DELETE_DIR;
+        
+        terminal.setEditable(true);
+        terminal.setCaretColor(Color.WHITE);
+        
+        String input = "Desea borrar el directorio (Todos los archivos dentro del direcotiro seran borrados)? (y/n): ";        
+        
+        inputs.append(input);        
+        
+        handleInput();
+    }//GEN-LAST:event_deleteDirActionPerformed
 
     /**
      * @param args the command line arguments

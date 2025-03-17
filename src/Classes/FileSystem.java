@@ -115,6 +115,14 @@ public class FileSystem {
         if(firstBlock == null){            
             return "No hay espacio disponible en el dispositivo de almacenamiento";
         }
+        
+        List<JFile> files = parentDirectory.getFiles();
+        for (int i = 0; i < files.getSize(); i++) {
+            JFile auxFile = files.get(i);            
+            if(auxFile.getName().equals(name + ".file")){
+                return "Ya existe un archivo con el nombre '" + name + "'";
+            }
+        }
                 
         JFile newFile = new JFile(name, size, firstBlock);  
         parentDirectory.addFile(newFile);
@@ -162,7 +170,16 @@ public class FileSystem {
             return "Ruta no valida";
         }
         
-        Directory newDirectory = new Directory(name);                
+        List<Directory> directories = parentDirectory.getDirectories();
+        for (int i = 0; i < directories.getSize(); i++) {
+            Directory auxDirectory = directories.get(i);
+            
+            if(auxDirectory.getName().equals(name)){
+                return "Ya existe un directorio con el nombre '" + name + "'";
+            }
+        }
+        
+        Directory newDirectory = new Directory(name, parentDirectory);         
         parentDirectory.getDirectories().append(newDirectory);
         
         return "Directorio creado exitosamente";
@@ -194,6 +211,59 @@ public class FileSystem {
         }
         
         return currentDirectory;         
+    }
+    
+    
+    public String deleteDirectory(String path){
+        Directory directory = getDirectory(path);
+        
+        System.out.println(directory.getName());
+        if(directory.getParent() == null){
+            return "No se puede eliminar el directorio raiz";
+        }
+        
+        if(directory == null){
+            return "Ruta de directorio no valida";            
+        }
+        
+        List<JFile> files = directory.getFiles();
+        
+        //Borrar todos los archivos del directorio
+        for (int i = 0; i < files.getSize(); i++) {
+            JFile file = files.pop(i);
+            
+            Block block = file.getFirstBlock();
+            
+            while(block != null){
+                block.setAvaible(true);
+
+                if(block.getNext() == null){
+                    block = null;
+                }
+                else{
+                    block = SD[block.getNext()];                        
+                }                    
+            }                        
+        }
+        
+        
+        //Borrar subdirectorios
+        directory.getDirectories().delete();
+        
+        //Borrar directorio
+        List<Directory> parentDirectories = directory.getParent().getDirectories();
+        
+        for (int i = 0; i < parentDirectories.getSize(); i++) {
+            if(parentDirectories.get(i).getName().equals(directory.getName())){
+                parentDirectories.pop(i);
+                break;
+            }
+        }
+        
+        return "Directorio borrado exitosamente";
+        
+        
+        
     }
     
         

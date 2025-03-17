@@ -47,6 +47,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Eliminar Directorio"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteDirActionPerformed"/>
+          </Events>
         </MenuItem>
       </SubComponents>
     </Container>
