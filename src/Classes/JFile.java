@@ -29,7 +29,12 @@ public class JFile {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if(!name.contains(".file")){
+            this.name = name + ".file";            
+        }
+        else{
+            this.name = name;            
+        }
     }
 
     public int getSize() {

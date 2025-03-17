@@ -46,6 +46,8 @@ public class MainView extends javax.swing.JFrame {
     private final int CREATE_DIR = 1;
     private final int DELETE_FILE = 2;
     private final int DELETE_DIR = 3;
+    private final int EDIT_FILE = 4;
+    private final int EDIT_DIR = 5;
     private int instruction = -1;
     
     public MainView(int SDsize) {
@@ -175,6 +177,12 @@ public class MainView extends javax.swing.JFrame {
                     case DELETE_DIR -> {
                         deleteDir();
                     }
+                    case EDIT_FILE -> {
+                        editFile();
+                    }
+                    case EDIT_DIR -> {
+                        editDir();
+                    }
                         
                 }
             }
@@ -274,6 +282,36 @@ public class MainView extends javax.swing.JFrame {
         terminal.setText(result);
     }
     
+    
+    public void editFile(){
+        terminal.setEditable(false);
+        
+        terminal.setText("");                
+        String name = outputs.get(0);  
+        String path = pathOutput.getText();
+        outputs.delete();       
+        
+        String result = fileSystem.editFile(name, path);
+        drawTree();        
+        
+        terminal.setText(result);
+    }
+    
+    
+    public void editDir(){
+        terminal.setEditable(false);
+        
+        terminal.setText("");                
+        String name = outputs.get(0);  
+        String path = pathOutput.getText();
+        outputs.delete();
+                
+        String result = fileSystem.editDirectory(name, path);
+        drawTree();        
+        
+        terminal.setText(result);
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -287,10 +325,6 @@ public class MainView extends javax.swing.JFrame {
         createMenu = new javax.swing.JPopupMenu();
         createFile = new javax.swing.JMenuItem();
         createDir = new javax.swing.JMenuItem();
-        deleteMenu = new javax.swing.JPopupMenu();
-        deleteFile = new javax.swing.JMenuItem();
-        deleteDir = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTree = new javax.swing.JTree();
@@ -324,22 +358,6 @@ public class MainView extends javax.swing.JFrame {
             }
         });
         createMenu.add(createDir);
-
-        deleteFile.setText("Eliminar archivo");
-        deleteFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteFileActionPerformed(evt);
-            }
-        });
-        deleteMenu.add(deleteFile);
-
-        deleteDir.setText("Eliminar Directorio");
-        deleteDir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteDirActionPerformed(evt);
-            }
-        });
-        deleteMenu.add(deleteDir);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -386,11 +404,6 @@ public class MainView extends javax.swing.JFrame {
                 deleteMouseClicked(evt);
             }
         });
-        delete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteActionPerformed(evt);
-            }
-        });
         jPanel1.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 0, 30, 30));
 
         terminal.setEditable(false);
@@ -425,9 +438,9 @@ public class MainView extends javax.swing.JFrame {
         edit.setBackground(new java.awt.Color(0, 0, 0));
         edit.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         edit.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        edit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editActionPerformed(evt);
+        edit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                editMouseClicked(evt);
             }
         });
         jPanel1.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, 30, 30));
@@ -537,24 +550,6 @@ public class MainView extends javax.swing.JFrame {
         handleInput();
     }//GEN-LAST:event_createDirActionPerformed
 
-    private void deleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteFileActionPerformed
-        if(!pathOutput.getText().contains(".file")){
-            terminal.setText("No se puede borrar en esta ruta");
-            return;
-        }
-        
-        instruction = DELETE_FILE;
-        
-        terminal.setEditable(true);
-        terminal.setCaretColor(Color.WHITE);
-        
-        String input = "Desea borrar el archivo? (y/n): ";        
-        
-        inputs.append(input);        
-        
-        handleInput();
-    }//GEN-LAST:event_deleteFileActionPerformed
-
     private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
         terminal.setEditable(true);
         terminal.setCaretColor(Color.WHITE);
@@ -575,31 +570,25 @@ public class MainView extends javax.swing.JFrame {
         handleInput();                        
     }//GEN-LAST:event_deleteMouseClicked
 
-    private void deleteDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDirActionPerformed
-        if(pathOutput.getText().contains(".file")){
-            terminal.setText("No se puede borrar en esta ruta");
-            return;
-        }
-        
-        instruction = DELETE_DIR;
-        
+    private void editMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseClicked
         terminal.setEditable(true);
         terminal.setCaretColor(Color.WHITE);
         
-        String input = "Desea borrar el directorio (Todos los archivos dentro del direcotiro seran borrados)? (y/n): ";        
+        String input;
+        if(pathOutput.getText().contains(".file")){
+            instruction = EDIT_FILE;
+            
+            input = "Ingrese el nuevo nombre del archivo: ";        
+        }
+        else{
+            instruction = EDIT_DIR;
+                              
+            input = "Ingrese el nuevo nombre del directorio: ";        
+        }
         
-        inputs.append(input);        
-        
+        inputs.append(input);                            
         handleInput();
-    }//GEN-LAST:event_deleteDirActionPerformed
-
-    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editActionPerformed
-
-    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_deleteActionPerformed
+    }//GEN-LAST:event_editMouseClicked
 
     /**
      * @param args the command line arguments
@@ -643,11 +632,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem createFile;
     private javax.swing.JPopupMenu createMenu;
     private javax.swing.JButton delete;
-    private javax.swing.JMenuItem deleteDir;
-    private javax.swing.JMenuItem deleteFile;
-    private javax.swing.JPopupMenu deleteMenu;
     private javax.swing.JButton edit;
-    private javax.swing.JPopupMenu editMenu;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

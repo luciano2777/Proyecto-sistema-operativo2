@@ -174,6 +174,65 @@ public class FileSystem {
     }
     
     
+    public String editFile(String name, String path){
+        String fileToDelete = path.split("/")[path.split("/").length-1];
+        if(!fileToDelete.contains(".file") || path.equals("root/")){            
+            return "Ruta no valida";
+        }
+        
+        String[] arrayPath = path.split("/");
+        String parentPath = "";
+        for (int i = 0; i < arrayPath.length-1; i++) {
+            parentPath += arrayPath[i] + "/";
+        }
+        
+        JFile file = getFile(path);
+        Directory directory = getDirectory(parentPath);
+        List<JFile> files = directory.getFiles();
+        
+        for (int i = 0; i < files.getSize(); i++) {
+            JFile auxFile = files.get(i);
+            if(auxFile.getName().equals(name)){
+                return "Ya existe un archivo con el nombre '" + name + "'";
+            }
+        }
+        
+        file.setName(name);
+        return "Archivo editado exitosamente";
+    }
+    
+    
+    
+    public JFile getFile(String path){
+        String[] arrayPath = null;
+        try{
+            arrayPath = path.split("/");
+        }
+        catch(Exception e){
+            System.out.println("Ruta de directorio no valida");
+            return null;            
+        }
+        
+        String parentPath = "";
+        for (int i = 0; i < arrayPath.length-1; i++) {
+            parentPath += arrayPath[i] + "/";
+        }
+        
+        Directory parentDirectory = getDirectory(parentPath);
+        List<JFile> files = parentDirectory.getFiles();
+        
+        for (int i = 0; i < files.getSize(); i++) {
+            JFile file = files.get(i);
+            
+            if(file.getName().equals(arrayPath[arrayPath.length-1])){
+                return file;
+            }
+        }
+        
+        return null;
+    }
+    
+    
     public String createDirectory(String name, String parentPathDirectory){
         Directory parentDirectory = getDirectory(parentPathDirectory);
         
@@ -271,10 +330,32 @@ public class FileSystem {
             }
         }
         
-        return "Directorio borrado exitosamente";
+        return "Directorio borrado exitosamente";                        
+    }
+    
+    
+    public String editDirectory(String name, String path){
+        String fileToDelete = path.split("/")[path.split("/").length-1];
+        if(fileToDelete.contains(".file") ){            
+            return "Ruta no valida";
+        }
         
+        if(path.equals("root/")){
+            return "No se puede editar el directorio raiz";
+        }
+                
+        Directory directory = getDirectory(path);
+        List<Directory> directories = directory.getParent().getDirectories();
         
+        for (int i = 0; i < directories.getSize(); i++) {
+            Directory auxDirectory = directories.get(i);
+            if(auxDirectory.getName().equals(name)){
+                return "Ya existe un archivo con el nombre '" + name + "'";
+            }
+        }
         
+        directory.setName(name);
+        return "Archivo editado exitosamente";
     }
     
         
