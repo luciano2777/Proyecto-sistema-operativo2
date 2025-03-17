@@ -14,11 +14,13 @@ public class FileSystem {
     private Block[] SD;
     private List<JFile> Files;
     private Directory root;
+    private boolean adminMode;
 
     public FileSystem(int SDsize) {
         this.SD = new Block[SDsize];
         this.Files = new List();
         this.root = new Directory("root");
+        this.adminMode = false;
         
         for (int i = 0; i < SD.length; i++) {
             SD[i] = new Block();           
@@ -48,6 +50,15 @@ public class FileSystem {
     public void setRoot(Directory root) {
         this.root = root;
     }
+
+    public boolean isAdminMode() {
+        return adminMode;
+    }
+
+    public void setAdminMode(boolean adminMode) {
+        this.adminMode = adminMode;
+    }
+    
     
     
     

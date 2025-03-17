@@ -5,6 +5,7 @@
 package GUI;
 
 import Assets.LeftButtonBorder;
+import Assets.MidButtonBorder;
 import Assets.RightButtonBorder;
 import Assets.TreeRender;
 import Classes.Directory;
@@ -106,6 +107,7 @@ public class MainView extends javax.swing.JFrame {
 
         ImageIcon createIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"plus.png").normalize().toString());
         ImageIcon deleteIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"minus.png").normalize().toString());
+        ImageIcon editIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"edit.png").normalize().toString());
 
         Image createImage = createIcon.getImage();
         Image scaledImage = createImage.getScaledInstance((int)(create.getWidth()), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);
@@ -115,13 +117,17 @@ public class MainView extends javax.swing.JFrame {
         scaledImage = deleteImage.getScaledInstance((int)(delete.getWidth()), (int)(delete.getHeight() / 1.2), Image.SCALE_SMOOTH);
         delete.setIcon(new ImageIcon(scaledImage));
         
-        create.setBorder(new LeftButtonBorder(Color.WHITE, 1));
+        Image editImage = editIcon.getImage();
+        scaledImage = editImage.getScaledInstance((int)(create.getWidth() / 1.2), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);
+        edit.setIcon(new ImageIcon(scaledImage));
+        
         delete.setBorder(new RightButtonBorder(Color.WHITE, 1));
+        create.setBorder(new MidButtonBorder(Color.WHITE, 1));
+        edit.setBorder(new LeftButtonBorder(Color.WHITE, 1));
         
         //Iniciar el nuevo TreeRender
         JTree.setCellRenderer(new TreeRender());
-        
-        
+                
         //Estado incial de la terminal
         terminal.getCaret().setVisible(false);
         terminal.setCaretColor(new Color(0, 19, 66));
@@ -284,6 +290,7 @@ public class MainView extends javax.swing.JFrame {
         deleteMenu = new javax.swing.JPopupMenu();
         deleteFile = new javax.swing.JMenuItem();
         deleteDir = new javax.swing.JMenuItem();
+        editMenu = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTree = new javax.swing.JTree();
@@ -293,6 +300,8 @@ public class MainView extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         terminal = new javax.swing.JTextArea();
         leftPanel = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        edit = new javax.swing.JButton();
 
         createMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -357,7 +366,7 @@ public class MainView extends javax.swing.JFrame {
                 pathOutputActionPerformed(evt);
             }
         });
-        jPanel1.add(pathOutput, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 620, 30));
+        jPanel1.add(pathOutput, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 590, 30));
 
         create.setBackground(new java.awt.Color(0, 0, 0));
         create.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
@@ -375,6 +384,11 @@ public class MainView extends javax.swing.JFrame {
         delete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 deleteMouseClicked(evt);
+            }
+        });
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
             }
         });
         jPanel1.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 0, 30, 30));
@@ -400,19 +414,23 @@ public class MainView extends javax.swing.JFrame {
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, 680, 180));
 
         leftPanel.setBackground(new java.awt.Color(0, 19, 66));
+        leftPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
-        leftPanel.setLayout(leftPanelLayout);
-        leftPanelLayout.setHorizontalGroup(
-            leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 170, Short.MAX_VALUE)
-        );
-        leftPanelLayout.setVerticalGroup(
-            leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
-        );
+        jButton1.setBackground(new java.awt.Color(243, 243, 243));
+        jButton1.setText("Guardar Cambios");
+        leftPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 130, 40));
 
         jPanel1.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 540));
+
+        edit.setBackground(new java.awt.Color(0, 0, 0));
+        edit.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
+        edit.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
+        jPanel1.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, 30, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -538,7 +556,23 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteFileActionPerformed
 
     private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
-        deleteMenu.show(delete, 0, delete.getHeight());
+        terminal.setEditable(true);
+        terminal.setCaretColor(Color.WHITE);
+        
+        String input;
+        if(pathOutput.getText().contains(".file")){
+            instruction = DELETE_FILE;
+            
+            input = "Desea borrar el archivo? (y/n): ";        
+        }
+        else{
+            instruction = DELETE_DIR;
+                              
+            input = "Desea borrar el directorio (Todos los archivos dentro del direcotiro seran borrados)? (y/n): ";        
+        }
+        
+        inputs.append(input);                            
+        handleInput();                        
     }//GEN-LAST:event_deleteMouseClicked
 
     private void deleteDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDirActionPerformed
@@ -558,6 +592,14 @@ public class MainView extends javax.swing.JFrame {
         
         handleInput();
     }//GEN-LAST:event_deleteDirActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_editActionPerformed
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -604,6 +646,9 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JMenuItem deleteDir;
     private javax.swing.JMenuItem deleteFile;
     private javax.swing.JPopupMenu deleteMenu;
+    private javax.swing.JButton edit;
+    private javax.swing.JPopupMenu editMenu;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
