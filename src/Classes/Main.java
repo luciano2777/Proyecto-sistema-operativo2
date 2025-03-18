@@ -27,7 +27,7 @@ public class Main {
         
         
         
-        MainView mv = new MainView();
+        MainView mv = new MainView(20);
         mv.setVisible(true);
 
         

@@ -338,11 +338,15 @@ public class List<T> {
     }
     
     /***
-     * Permite imprimir la lista en consola usando System.out.println("");
+     * Permite imprimir la lista en consola usando System.out.println(list);
      * @return 
      */
     @Override
     public String toString() {        
+        if(isEmpty()){
+            return "[]";
+        }
+        
         String listStr = "["; 
         Node<T> pointer = this.head;
         for (int i = 0; i < this.size; i++) {

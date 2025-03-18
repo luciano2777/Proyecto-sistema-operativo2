@@ -52,19 +52,21 @@ public class MainView extends javax.swing.JFrame {
     private int instruction = -1;
     
     public MainView(int SDsize) {
-        this.fileSystem = new FileSystem(SDsize);        
+        
+        if(Util.load() == null){
+            this.fileSystem = new FileSystem(SDsize);                    
+        }
+        else{
+            this.fileSystem = Util.load();                    
+        }
         init();        
-        drawTree();        
-    }
-    
-    public MainView(){
-        this.fileSystem = Util.load();
-        init();        
-        drawTree();
-    }
+        drawTree();   
+        this.setLocationRelativeTo(null);
+                
+    }   
     
     
-    public void drawTree(){
+    private void drawTree(){
         DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("root");
         
         Queue<Directory> dirQueue = new Queue();
@@ -80,6 +82,7 @@ public class MainView extends javax.swing.JFrame {
             List<Directory> currentDirectories = currentDirectory.getDirectories();
             List<JFile> currentFiles = currentDirectory.getFiles();
             DefaultMutableTreeNode currentNode = nodeQueue.dequeue();
+                        
             
             for (int i = 0; i < currentDirectories.getSize(); i++) {
                 Directory directory = currentDirectories.get(i);
@@ -92,7 +95,8 @@ public class MainView extends javax.swing.JFrame {
             }  
             
             for (int i = 0; i < currentFiles.getSize(); i++) {
-                JFile file = currentFiles.get(i);                                
+                JFile file = currentFiles.get(i);  
+                
                 DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(file.getName());
                 currentNode.add(newNode);
             }
@@ -212,9 +216,9 @@ public class MainView extends javax.swing.JFrame {
         }
         
         String result = fileSystem.createFile(name, Integer.parseInt(size), path);
+        terminal.setText(result);        
         drawTree();        
         
-        terminal.setText(result);        
     }
     
     
@@ -232,9 +236,10 @@ public class MainView extends javax.swing.JFrame {
         }                
         
         String result = fileSystem.createDirectory(name, path);
+        terminal.setText(result);  
+        pathOutput.setText("root/");
         drawTree();        
                 
-        terminal.setText(result);                                   
     }
     
     
@@ -257,9 +262,10 @@ public class MainView extends javax.swing.JFrame {
         }
         
         String result = fileSystem.deleteFile(path);
+        terminal.setText(result);
+        pathOutput.setText("root/");
         drawTree();        
         
-        terminal.setText(result);
     }
     
     
@@ -282,9 +288,10 @@ public class MainView extends javax.swing.JFrame {
         }
         
         String result = fileSystem.deleteDirectory(path);
+        terminal.setText(result);
+        pathOutput.setText("root/");
         drawTree();        
         
-        terminal.setText(result);
     }
     
     
@@ -297,9 +304,10 @@ public class MainView extends javax.swing.JFrame {
         outputs.delete();       
         
         String result = fileSystem.editFile(name, path);
+        terminal.setText(result);
+        pathOutput.setText("root/");
         drawTree();        
         
-        terminal.setText(result);
     }
     
     
@@ -312,9 +320,10 @@ public class MainView extends javax.swing.JFrame {
         outputs.delete();
                 
         String result = fileSystem.editDirectory(name, path);
+        terminal.setText(result);
+        pathOutput.setText("root/");
         drawTree();        
         
-        terminal.setText(result);
     }
     
 
@@ -365,6 +374,7 @@ public class MainView extends javax.swing.JFrame {
         createMenu.add(createDir);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -432,6 +442,7 @@ public class MainView extends javax.swing.JFrame {
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, 680, 180));
 
         leftPanel.setBackground(new java.awt.Color(0, 19, 66));
+        leftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         leftPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         save.setBackground(new java.awt.Color(243, 243, 243));
@@ -501,8 +512,14 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_createMenuMouseClicked
 
     private void createFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createFileActionPerformed
+        inputs.delete();
         if(pathOutput.getText().contains(".file")) {
             terminal.setText("No se puede crear un archivo en esta ruta");
+            return;
+        }
+        
+        if(pathOutput.getText().isBlank()){
+            terminal.setText("No hay ninguna ruta seleccionada");
             return;
         }
         
@@ -544,8 +561,14 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_terminalKeyPressed
 
     private void createDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createDirActionPerformed
+        inputs.delete();
         if(pathOutput.getText().contains(".file")){
             terminal.setText("No se puede crear un directorio en esta ruta");
+            return;
+        }
+        
+        if(pathOutput.getText().isBlank()){
+            terminal.setText("No hay ninguna ruta seleccionada");
             return;
         }
         
@@ -562,8 +585,14 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_createDirActionPerformed
 
     private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
+        inputs.delete();
         terminal.setEditable(true);
         terminal.setCaretColor(Color.WHITE);
+        
+        if(pathOutput.getText().isBlank()){
+            terminal.setText("No hay ninguna ruta seleccionada");
+            return;
+        }
         
         String input;
         if(pathOutput.getText().contains(".file")){
@@ -582,8 +611,14 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_deleteMouseClicked
 
     private void editMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseClicked
+        inputs.delete();
         terminal.setEditable(true);
         terminal.setCaretColor(Color.WHITE);
+        
+        if(pathOutput.getText().isBlank()){
+            terminal.setText("No hay ninguna ruta seleccionada");
+            return;
+        }
         
         String input;
         if(pathOutput.getText().contains(".file")){
@@ -602,11 +637,7 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_editMouseClicked
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        try {
-            Util.save(fileSystem);
-        } catch (IOException ex) {
-            Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Util.save(fileSystem);
     }//GEN-LAST:event_saveActionPerformed
 
     /**

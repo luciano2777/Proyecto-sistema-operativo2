@@ -33,6 +33,11 @@ public class Block {
         this.next = next;
     }
     
+    @Override
+    public String toString(){
+        return "avaible -> " + avaible + " | next -> " + next;
+    }
+    
     
     
 }

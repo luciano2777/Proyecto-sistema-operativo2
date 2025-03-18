@@ -11,14 +11,12 @@ import DataStructures.List;
  * @author Juan
  */
 public class FileSystem {
-    private Block[] SD;
-    private List<JFile> Files;
+    private Block[] SD;    
     private Directory root;
     private boolean adminMode;
 
     public FileSystem(int SDsize) {
-        this.SD = new Block[SDsize];
-        this.Files = new List();
+        this.SD = new Block[SDsize];       
         this.root = new Directory("root");
         this.adminMode = false;
         
@@ -27,20 +25,20 @@ public class FileSystem {
         }
     }
 
+    public FileSystem(Block[] SD, Directory root, boolean adminMode) {
+        this.SD = SD;        
+        this.root = root;
+        this.adminMode = adminMode;
+    }
+    
+    
+
     public Block[] getSD() {
         return SD;
     }
 
     public void setSD(Block[] SD) {
         this.SD = SD;
-    }
-
-    public List<JFile> getFiles() {
-        return Files;
-    }
-
-    public void setFiles(List<JFile> Files) {
-        this.Files = Files;
     }
 
     public Directory getRoot() {
@@ -137,37 +135,57 @@ public class FileSystem {
                 
         JFile newFile = new JFile(name, size, firstBlock);  
         parentDirectory.addFile(newFile);
+        
+        for(Block block: SD){
+            System.out.println(block);
+        }
+        
         return "Archivo creado exitosamente";
     }
     
     
-    public String deleteFile(String path){
-        String fileToDelete = path.split("/")[path.split("/").length-1];
-        if(!fileToDelete.contains(".file")){            
+    public String deleteFile(String path){        
+        if(!path.contains(".file")){            
+            return "Ruta no valida";
+        }
+        
+        String[] arrayPath = null;
+        String parentPath = "";
+        try{
+            arrayPath = path.split("/");
+            
+            for (int i = 0; i < arrayPath.length-1; i++) {
+                parentPath += arrayPath[i] + "/";
+            }
+        }
+        catch(Exception e){
             return "Ruta no valida";
         }
                 
-        Directory directory = getDirectory(path);
+        JFile file = getFile(path);
+        Block firstBlock = file.getFirstBlock();
         
-        List<JFile> files = directory.getFiles();
+        //Liberar el archivo de todos los bloques
+        while(firstBlock != null){
+            firstBlock.setAvaible(true);
+            
+            if(firstBlock.getNext() == null){
+                break;
+            }
+            
+            Block nextBlock = SD[firstBlock.getNext()];
+            firstBlock.setNext(null);
+            firstBlock = nextBlock;
+        }
         
-        for (int i = 0; i < files.getSize(); i++) {
-            JFile file = files.get(i);
-            if(file.getName().equals(fileToDelete)){
-                Block block = file.getFirstBlock();
-                
-                while(block != null){
-                    block.setAvaible(true);
-                    
-                    if(block.getNext() == null){
-                        block = null;
-                    }
-                    else{
-                        block = SD[block.getNext()];                        
-                    }                    
-                }
-                
-                files.pop(i);
+        //Eliminar el archivo del directorio   
+                        
+        Directory parentDirectory = getDirectory(parentPath);           
+        
+        for (int i = 0; i < parentDirectory.getFiles().getSize(); i++) {
+            JFile auxFile = parentDirectory.getFiles().get(i);
+            if(auxFile.getName().equals(file.getName())){                
+                parentDirectory.getFiles().pop(i);
             }
         }
         return "Archivo borrado exitosamente";
@@ -204,14 +222,14 @@ public class FileSystem {
     
     
     public JFile getFile(String path){
-        String[] arrayPath = null;
-        try{
+        String[] arrayPath = null;                
+        try{            
             arrayPath = path.split("/");
         }
         catch(Exception e){
             System.out.println("Ruta de directorio no valida");
             return null;            
-        }
+        }        
         
         String parentPath = "";
         for (int i = 0; i < arrayPath.length-1; i++) {
@@ -259,13 +277,17 @@ public class FileSystem {
     
     public Directory getDirectory(String path){
         String[] arrayPath = null;
+        
+        //System.out.println(path);
+        
         try{
             arrayPath = path.split("/");
         }
         catch(Exception e){
-            System.out.println("Ruta de directorio no valida");
+            System.out.println("Ruta de directorio no valida");            
             return null;            
-        }
+        }        
+        
                    
         Directory currentDirectory = this.root;
         for (int i = 1; i < arrayPath.length; i++) {            
@@ -284,6 +306,7 @@ public class FileSystem {
     }
     
     
+    
     public String deleteDirectory(String path){
         if(path.equals("root/")){            
             return "No se puede eliminar el directorio raiz";
@@ -294,11 +317,12 @@ public class FileSystem {
             return "Ruta de directorio no valida";            
         }
         
-        List<JFile> files = directory.getFiles();
+        
+        List<JFile> files = directory.getFiles();        
         
         //Borrar todos los archivos del directorio
         for (int i = 0; i < files.getSize(); i++) {
-            JFile file = files.pop(i);
+            JFile file = files.get(i);            
             
             Block block = file.getFirstBlock();
             
@@ -314,16 +338,22 @@ public class FileSystem {
             }                        
         }
         
+        files.delete();
+        
         
         //Borrar subdirectorios
         directory.getDirectories().delete();
         
+        
         //Borrar directorio
+        Directory parentDirectory = getDirectory(directory.getParentPath());
         List<Directory> parentDirectories = getDirectory(directory.getParentPath()).getDirectories();
+        
+        
         
         for (int i = 0; i < parentDirectories.getSize(); i++) {
             if(parentDirectories.get(i).getName().equals(directory.getName())){
-                parentDirectories.pop(i);
+                parentDirectories.pop(i);                
                 break;
             }
         }
