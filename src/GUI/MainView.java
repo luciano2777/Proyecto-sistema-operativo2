@@ -110,44 +110,61 @@ public class MainView extends javax.swing.JFrame {
     
     
     private void init(){
-        initComponents();
-        
-        if(adminMode){
-            adminModeLabel.setText("Modo: Administrador");            
-        }
-        else{
-            adminModeLabel.setText("Modo: Usuario");            
-        }
+        initComponents();                
         
         //Iniciar imagenes de la App
         String sp = File.separator;
         ImageIcon appIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"fileSystemIcon.png").normalize().toString());
         setIconImage(appIcon.getImage());
 
-        ImageIcon createIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"plus.png").normalize().toString());
-        ImageIcon deleteIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"minus.png").normalize().toString());
-        ImageIcon editIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"edit.png").normalize().toString());
+        //Icono del logout
         ImageIcon logoutIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"logOut.png").normalize().toString());
-
-        Image createImage = createIcon.getImage();
-        Image scaledImage = createImage.getScaledInstance((int)(create.getWidth()), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);
-        create.setIcon(new ImageIcon(scaledImage));
-
-        Image deleteImage = deleteIcon.getImage();
-        scaledImage = deleteImage.getScaledInstance((int)(delete.getWidth()), (int)(delete.getHeight() / 1.2), Image.SCALE_SMOOTH);
-        delete.setIcon(new ImageIcon(scaledImage));
-        
-        Image editImage = editIcon.getImage();
-        scaledImage = editImage.getScaledInstance((int)(create.getWidth() / 1.2), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);
-        edit.setIcon(new ImageIcon(scaledImage));
-        
         Image logoutImage = logoutIcon.getImage();
-        scaledImage = logoutImage.getScaledInstance((int)(logout.getWidth() / 1.2), (int)(logout.getHeight() / 1.2), Image.SCALE_SMOOTH);
-        logout.setIcon(new ImageIcon(scaledImage));
+        Image logoutScaledImage = logoutImage.getScaledInstance((int)(logout.getWidth() / 1.2), (int)(logout.getHeight() / 1.2), Image.SCALE_SMOOTH);
+        logout.setIcon(new ImageIcon(logoutScaledImage));
         
+        //Si modo admin
+        if(adminMode){
+            adminModeLabel.setText("Modo: Administrador"); 
+            
+            //Habilitar CRUD
+            create.setEnabled(true);
+            delete.setEnabled(true);
+            edit.setEnabled(true);            
+            
+            ImageIcon createIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"plus.png").normalize().toString());
+            ImageIcon deleteIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"minus.png").normalize().toString());
+            ImageIcon editIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"edit.png").normalize().toString());
+            
+            //Icono crear
+            Image createImage = createIcon.getImage();
+            Image scaledImage = createImage.getScaledInstance((int)(create.getWidth()), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);        
+            create.setIcon(new ImageIcon(scaledImage));
+            
+            //Icono eliminar
+            Image deleteImage = deleteIcon.getImage();
+            scaledImage = deleteImage.getScaledInstance((int)(delete.getWidth()), (int)(delete.getHeight() / 1.2), Image.SCALE_SMOOTH);        
+            delete.setIcon(new ImageIcon(scaledImage));
+            
+            //Icono editar
+            Image editImage = editIcon.getImage();
+            scaledImage = editImage.getScaledInstance((int)(create.getWidth() / 1.2), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);        
+            edit.setIcon(new ImageIcon(scaledImage));
+        }
+        
+        //Si modo usuario
+        else{
+            adminModeLabel.setText("Modo: Usuario");        
+            create.setEnabled(false);
+            delete.setEnabled(false);
+            edit.setEnabled(false);
+        }
+        
+        //Crear bordes para los botones
         delete.setBorder(new RightButtonBorder(Color.WHITE, 1));
         create.setBorder(new MidButtonBorder(Color.WHITE, 1));
         edit.setBorder(new LeftButtonBorder(Color.WHITE, 1));
+        
         
         //Iniciar el nuevo TreeRender
         JTree.setCellRenderer(new TreeRender());
@@ -364,6 +381,7 @@ public class MainView extends javax.swing.JFrame {
         save = new javax.swing.JButton();
         logout = new javax.swing.JButton();
         adminModeLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         edit = new javax.swing.JButton();
 
         createMenu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -429,9 +447,9 @@ public class MainView extends javax.swing.JFrame {
         delete.setBackground(new java.awt.Color(0, 0, 0));
         delete.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         delete.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        delete.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                deleteMouseClicked(evt);
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
             }
         });
         jPanel1.add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 0, 30, 30));
@@ -474,6 +492,11 @@ public class MainView extends javax.swing.JFrame {
 
         logout.setBackground(new java.awt.Color(0, 0, 0));
         logout.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutActionPerformed(evt);
+            }
+        });
         leftPanel.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 30, 30));
 
         adminModeLabel.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
@@ -481,14 +504,22 @@ public class MainView extends javax.swing.JFrame {
         adminModeLabel.setText("Modo:");
         leftPanel.add(adminModeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 520, 160, -1));
 
+        jButton1.setText("ver bloques");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        leftPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+
         jPanel1.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 540));
 
         edit.setBackground(new java.awt.Color(0, 0, 0));
         edit.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         edit.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        edit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                editMouseClicked(evt);
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
             }
         });
         jPanel1.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, 30, 30));
@@ -610,33 +641,11 @@ public class MainView extends javax.swing.JFrame {
         handleInput();
     }//GEN-LAST:event_createDirActionPerformed
 
-    private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
-        inputs.delete();
-        terminal.setEditable(true);
-        terminal.setCaretColor(Color.WHITE);
-        
-        if(pathOutput.getText().isBlank()){
-            terminal.setText("No hay ninguna ruta seleccionada");
-            return;
-        }
-        
-        String input;
-        if(pathOutput.getText().contains(".file")){
-            instruction = DELETE_FILE;
-            
-            input = "Desea borrar el archivo? (y/n): ";        
-        }
-        else{
-            instruction = DELETE_DIR;
-                              
-            input = "Desea borrar el directorio (Todos los archivos dentro del direcotiro seran borrados)? (y/n): ";        
-        }
-        
-        inputs.append(input);                            
-        handleInput();                        
-    }//GEN-LAST:event_deleteMouseClicked
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        Util.save(fileSystem);
+    }//GEN-LAST:event_saveActionPerformed
 
-    private void editMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseClicked
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
         inputs.delete();
         terminal.setEditable(true);
         terminal.setCaretColor(Color.WHITE);
@@ -660,11 +669,44 @@ public class MainView extends javax.swing.JFrame {
         
         inputs.append(input);                            
         handleInput();
-    }//GEN-LAST:event_editMouseClicked
+    }//GEN-LAST:event_editActionPerformed
 
-    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-        Util.save(fileSystem);
-    }//GEN-LAST:event_saveActionPerformed
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        inputs.delete();
+        terminal.setEditable(true);
+        terminal.setCaretColor(Color.WHITE);
+        
+        if(pathOutput.getText().isBlank()){
+            terminal.setText("No hay ninguna ruta seleccionada");
+            return;
+        }
+        
+        String input;
+        if(pathOutput.getText().contains(".file")){
+            instruction = DELETE_FILE;
+            
+            input = "Desea borrar el archivo? (y/n): ";        
+        }
+        else{
+            instruction = DELETE_DIR;
+                              
+            input = "Desea borrar el directorio (Todos los archivos dentro del direcotiro seran borrados)? (y/n): ";        
+        }
+        
+        inputs.append(input);                            
+        handleInput();
+    }//GEN-LAST:event_deleteActionPerformed
+
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
+        LoginView lv = new LoginView();
+        lv.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_logoutActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        BlocksView blocksView = new BlocksView(fileSystem);
+        blocksView.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -710,6 +752,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JPopupMenu createMenu;
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
