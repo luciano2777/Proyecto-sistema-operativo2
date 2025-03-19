@@ -13,11 +13,13 @@ import DataStructures.List;
 public class FileSystem {
     private Block[] SD;    
     private Directory root;
+    private List<JFile> files;
     private boolean adminMode;
 
     public FileSystem(int SDsize) {
         this.SD = new Block[SDsize];       
         this.root = new Directory("root");
+        this.files = new List();
         this.adminMode = false;
         
         for (int i = 0; i < SD.length; i++) {
@@ -28,6 +30,7 @@ public class FileSystem {
     public FileSystem(Block[] SD, Directory root, boolean adminMode) {
         this.SD = SD;        
         this.root = root;
+        this.files = new List();
         this.adminMode = adminMode;
     }
     
@@ -56,6 +59,16 @@ public class FileSystem {
     public void setAdminMode(boolean adminMode) {
         this.adminMode = adminMode;
     }
+
+    public List<JFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<JFile> files) {
+        this.files = files;
+    }
+    
+    
     
     
     
@@ -135,6 +148,7 @@ public class FileSystem {
                 
         JFile newFile = new JFile(name, size, firstBlock);  
         parentDirectory.addFile(newFile);
+        files.append(newFile);
         
         for(Block block: SD){
             System.out.println(block);
@@ -188,6 +202,15 @@ public class FileSystem {
                 parentDirectory.getFiles().pop(i);
             }
         }
+        
+        //Eliminar de la lista de archivos
+        for (int i = 0; i < files.getSize(); i++) {
+            JFile auxFile = files.get(i);
+            if(auxFile.getName().equals(file.getName())){
+                files.pop(i);
+            }
+        }
+        
         return "Archivo borrado exitosamente";
     }
     
