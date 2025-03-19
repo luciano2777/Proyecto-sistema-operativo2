@@ -79,7 +79,7 @@ public class MainView extends javax.swing.JFrame {
                 
         while(!dirQueue.isEmpty()){
             Directory currentDirectory = dirQueue.dequeue();
-            
+                        
             List<Directory> currentDirectories = currentDirectory.getDirectories();
             List<JFile> currentFiles = currentDirectory.getFiles();
             DefaultMutableTreeNode currentNode = nodeQueue.dequeue();
@@ -94,7 +94,7 @@ public class MainView extends javax.swing.JFrame {
                 dirQueue.enqueue(directory);
                 nodeQueue.enqueue(newNode);
             }  
-            
+                        
             for (int i = 0; i < currentFiles.getSize(); i++) {
                 JFile file = currentFiles.get(i);  
                 
@@ -382,6 +382,7 @@ public class MainView extends javax.swing.JFrame {
         logout = new javax.swing.JButton();
         adminModeLabel = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        table = new javax.swing.JButton();
         edit = new javax.swing.JButton();
 
         createMenu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -504,13 +505,21 @@ public class MainView extends javax.swing.JFrame {
         adminModeLabel.setText("Modo:");
         leftPanel.add(adminModeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 520, 160, -1));
 
-        jButton1.setText("ver bloques");
+        jButton1.setText("Ver bloques");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
         leftPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+
+        table.setText("Tabla");
+        table.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tableActionPerformed(evt);
+            }
+        });
+        leftPanel.add(table, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, -1, -1));
 
         jPanel1.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 540));
 
@@ -708,6 +717,11 @@ public class MainView extends javax.swing.JFrame {
         blocksView.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void tableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableActionPerformed
+        TableView tableView = new TableView(fileSystem);
+        tableView.setVisible(true);
+    }//GEN-LAST:event_tableActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -760,6 +774,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JButton logout;
     private javax.swing.JTextField pathOutput;
     private javax.swing.JButton save;
+    private javax.swing.JButton table;
     private javax.swing.JTextArea terminal;
     // End of variables declaration//GEN-END:variables
 

@@ -5,8 +5,10 @@
 package GUI;
 
 import Classes.Block;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import javax.swing.JPanel;
 
 /**
  *
@@ -40,20 +42,20 @@ public class BlockComponent extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        background = new javax.swing.JPanel();
         blockID = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         next = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        background.setBackground(new java.awt.Color(255, 255, 255));
+        background.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         blockID.setText("num");
-        jPanel1.add(blockID, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, 30));
+        background.add(blockID, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, 30));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 50));
+        add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 50));
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -63,11 +65,19 @@ public class BlockComponent extends javax.swing.JPanel {
 
         add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, 50, 50));
     }// </editor-fold>//GEN-END:initComponents
+    
 
+    public void setBackgroundColor(Integer[] color) {
+        if(color != null){
+            this.background.setBackground(new Color(color[0], color[1], color[2]));            
+        }
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel background;
     private javax.swing.JLabel blockID;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel next;
     // End of variables declaration//GEN-END:variables

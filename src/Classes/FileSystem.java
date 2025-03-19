@@ -34,6 +34,13 @@ public class FileSystem {
         this.adminMode = adminMode;
     }
     
+    public FileSystem(Block[] SD, Directory root, List<JFile> files, boolean adminMode) {
+        this.SD = SD;        
+        this.root = root;
+        this.files = files;
+        this.adminMode = adminMode;
+    }
+    
     
 
     public Block[] getSD() {
@@ -66,26 +73,26 @@ public class FileSystem {
 
     public void setFiles(List<JFile> files) {
         this.files = files;
-    }
+    }        
     
     
     
     
-    
-    
-    public Block assignBlock(int size){
+    public Integer assignBlock(int size, Integer[] color){
         int remainingBlocks = size;
-        Block firstBlock = null;
+        Integer firstBlock = null;
         
         //Selecciona el primer bloque que este desocupado
-        for (Block block : SD) {
+        for (int i = 0; i < SD.length; i++) {
+            Block block = SD[i];
             if (block.isAvaible()) {
-                firstBlock = block; 
-                firstBlock.setAvaible(false); //Marca el primer bloque como no disponible
+                firstBlock = i; 
+                block.setAvaible(false); //Marca el primer bloque como no disponible
+                block.setColor(color);
                 remainingBlocks--;
                 break;
             }
-        }
+        }        
         
         //Si no hay bloques disponibles el SD esta lleno
         if(firstBlock == null){
@@ -94,11 +101,10 @@ public class FileSystem {
         }
         
         //Buscar los siguientes bloques para el fichero
-        Block currentBlock = firstBlock;
+        Block currentBlock = SD[firstBlock];
         for (int i = 0; i < SD.length; i++) {
             Block block = SD[i];
             if (block.isAvaible()) {
-                currentBlock.setNext(i);
                 currentBlock = block;                
                 remainingBlocks--;                                
             }            
@@ -111,17 +117,41 @@ public class FileSystem {
         //Si no hay bloques suficientes
         if(remainingBlocks > 0){
             System.out.println("El size del fichero sobrepasa la capacidad del dispositivo");
-            firstBlock.setAvaible(true); //Libera el primer bloque
+            SD[firstBlock].setAvaible(true); //Libera el primer bloque
+            Integer[] defaultColor = {255, 255, 255};
+            SD[firstBlock].setColor(defaultColor);
             return null;
         }  
         
+        //Buscar los siguientes bloques para el fichero
+        remainingBlocks = size-1;
+        currentBlock = SD[firstBlock];
+        for (int i = 0; i < SD.length; i++) {
+            Block block = SD[i];
+            if (block.isAvaible()) {
+                currentBlock.setNext(i);                
+                currentBlock = block;                
+                remainingBlocks--;                                
+            }            
+            
+            if(remainingBlocks == 0){
+                break;
+            }
+        }
+        
         //Marca los bloques del disco como no disponibles        
-        Block pointer = firstBlock;
+        Block pointer = SD[firstBlock];
         while(pointer.getNext() != null){
+            pointer.setColor(color);
             int idx = pointer.getNext();
             Block block = SD[idx];
-            block.setAvaible(false);
+            block.setAvaible(false);            
             pointer = SD[idx];
+        }
+        pointer.setColor(color);
+        
+        for(Block block: SD){
+            System.out.println(block);
         }
         
         return firstBlock;
@@ -132,27 +162,25 @@ public class FileSystem {
     public String createFile(String name, int size, String parentPathDirectory){
         Directory parentDirectory = getDirectory(parentPathDirectory);
         
-        Block firstBlock = assignBlock(size);
+        Integer[] color = Util.getRandomColor();
+        Integer firstBlock = assignBlock(size, color);
+        JFile newFile = new JFile(name, size, color, firstBlock);  
         
         if(firstBlock == null){            
             return "No hay espacio disponible en el dispositivo de almacenamiento";
         }
         
-        List<JFile> files = parentDirectory.getFiles();
-        for (int i = 0; i < files.getSize(); i++) {
-            JFile auxFile = files.get(i);            
+        List<JFile> parentFiles = parentDirectory.getFiles();
+        for (int i = 0; i < parentFiles.getSize(); i++) {
+            JFile auxFile = parentFiles.get(i);            
             if(auxFile.getName().equals(name + ".file")){
                 return "Ya existe un archivo con el nombre '" + name + "'";
             }
         }
                 
-        JFile newFile = new JFile(name, size, firstBlock);  
         parentDirectory.addFile(newFile);
         files.append(newFile);
         
-        for(Block block: SD){
-            System.out.println(block);
-        }
         
         return "Archivo creado exitosamente";
     }
@@ -177,11 +205,13 @@ public class FileSystem {
         }
                 
         JFile file = getFile(path);
-        Block firstBlock = file.getFirstBlock();
+        Block firstBlock = SD[file.getFirstBlock()];
         
         //Liberar el archivo de todos los bloques
+        Integer[] defaultColor = {255, 255, 255};
         while(firstBlock != null){
             firstBlock.setAvaible(true);
+            firstBlock.setColor(defaultColor);
             
             if(firstBlock.getNext() == null){
                 break;
@@ -341,13 +371,13 @@ public class FileSystem {
         }
         
         
-        List<JFile> files = directory.getFiles();        
+        List<JFile> directoryFiles = directory.getFiles();        
         
         //Borrar todos los archivos del directorio
-        for (int i = 0; i < files.getSize(); i++) {
-            JFile file = files.get(i);            
+        for (int i = 0; i < directoryFiles.getSize(); i++) {
+            JFile file = directoryFiles.get(i);            
             
-            Block block = file.getFirstBlock();
+            Block block = SD[file.getFirstBlock()];
             
             while(block != null){
                 block.setAvaible(true);
@@ -361,7 +391,7 @@ public class FileSystem {
             }                        
         }
         
-        files.delete();
+        directoryFiles.delete();
         
         
         //Borrar subdirectorios

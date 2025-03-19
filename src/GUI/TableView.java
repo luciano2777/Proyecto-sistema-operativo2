@@ -8,7 +8,13 @@ import Classes.Block;
 import Classes.FileSystem;
 import Classes.JFile;
 import DataStructures.List;
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -18,33 +24,46 @@ public class TableView extends javax.swing.JFrame {
     private static FileSystem fileSystem;
     
     public TableView(FileSystem fileSystem) {
-        initComponents();
         this.fileSystem = fileSystem;
         
-        
+        initComponents();
+        drawTable();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);                
     }
     
-    public void drawTable(){
+    private void drawTable(){
         DefaultTableModel tableModel = new DefaultTableModel();
         
         tableModel.addColumn("Nombre");
         tableModel.addColumn("Num Bloques");
         tableModel.addColumn("IDX bloque inicial");
+        tableModel.addColumn("Color");
         
         List<JFile> files = fileSystem.getFiles();
+        System.out.println(files);
         for (int i = 0; i < files.getSize(); i++) {
             JFile file = files.get(i);
             tableModel.addRow(new Object[]{
                 file.getName(),
-                file.getFirstBlock();
+                file.getSize(),
+                file.getFirstBlock(),                
+                file.getColor(),                
             });
         }
-        
-        tableModel.addRow(new Object[]{"Juan", 30});
-        tableModel.addRow(new Object[]{"María", 25});
-        tableModel.addRow(new Object[]{"Pedro", 35});
-
+        table.setModel(tableModel);
+        table.getColumnModel().getColumn(3).setCellRenderer(new ColorCellRenderer());
     }
+    
+    // Clase interna para el renderizador de celdas personalizado
+    static class ColorCellRenderer extends JPanel implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Integer[] color = (Integer[]) value;
+            setBackground(new Color(color[0], color[1], color[2]));
+            return this;
+        }
+    }
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -123,7 +142,7 @@ public class TableView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TableView().setVisible(true);
+                new TableView(fileSystem).setVisible(true);
             }
         });
     }

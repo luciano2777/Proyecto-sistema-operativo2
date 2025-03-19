@@ -11,10 +11,12 @@ package Classes;
 public class Block {    
     private boolean avaible;
     private Integer next;
+    private Integer[] color;
 
     public Block() {
         this.avaible = true;
         this.next = null;
+        this.color = null;
     }
 
     public boolean isAvaible() {
@@ -32,6 +34,17 @@ public class Block {
     public void setNext(Integer next) {
         this.next = next;
     }
+
+    public Integer[] getColor() {
+        return color;
+    }
+
+    public void setColor(Integer[] color) {
+        this.color = color;
+    }
+    
+    
+    
     
     @Override
     public String toString(){

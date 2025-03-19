@@ -6,6 +6,8 @@ package GUI;
 
 import Classes.Block;
 import Classes.FileSystem;
+import Classes.JFile;
+import DataStructures.List;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -30,13 +32,13 @@ public class BlocksView extends javax.swing.JFrame {
     
     
     private void drawBlocks(){
-        Block[] SD = fileSystem.getSD();
+        Block[] SD = fileSystem.getSD();        
         
         container.setLayout(new FlowLayout(FlowLayout.LEFT));
         
-        for (int i = 0; i < SD.length; i++) {
-            System.out.println(i);
+        for (int i = 0; i < SD.length; i++) {            
             BlockComponent block = new BlockComponent(i, SD[i]);
+            block.setBackgroundColor(SD[i].getColor());
             
             container.add(block);
         }
@@ -77,16 +79,16 @@ public class BlocksView extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addGap(52, 52, 52)
+                .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 552, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(32, 32, 32)
+                .addGap(33, 33, 33)
                 .addComponent(scrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pack();
