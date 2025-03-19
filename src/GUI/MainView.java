@@ -35,7 +35,7 @@ import javax.swing.tree.TreePath;
  */
 public class MainView extends javax.swing.JFrame {
     private FileSystem fileSystem;
-    private static int SDsize;
+    private static boolean adminMode;
     
     //Para la terminal
     private int inputLength;
@@ -51,10 +51,11 @@ public class MainView extends javax.swing.JFrame {
     private final int EDIT_DIR = 5;
     private int instruction = -1;
     
-    public MainView(int SDsize) {
+    public MainView(boolean adminMode) {
+        this.adminMode = adminMode;
         
         if(Util.load() == null){
-            this.fileSystem = new FileSystem(SDsize);                    
+            this.fileSystem = new FileSystem(49);                    
         }
         else{
             this.fileSystem = Util.load();                    
@@ -111,6 +112,13 @@ public class MainView extends javax.swing.JFrame {
     private void init(){
         initComponents();
         
+        if(adminMode){
+            adminModeLabel.setText("Modo: Administrador");            
+        }
+        else{
+            adminModeLabel.setText("Modo: Usuario");            
+        }
+        
         //Iniciar imagenes de la App
         String sp = File.separator;
         ImageIcon appIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"fileSystemIcon.png").normalize().toString());
@@ -119,6 +127,7 @@ public class MainView extends javax.swing.JFrame {
         ImageIcon createIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"plus.png").normalize().toString());
         ImageIcon deleteIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"minus.png").normalize().toString());
         ImageIcon editIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"edit.png").normalize().toString());
+        ImageIcon logoutIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"logOut.png").normalize().toString());
 
         Image createImage = createIcon.getImage();
         Image scaledImage = createImage.getScaledInstance((int)(create.getWidth()), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);
@@ -131,6 +140,10 @@ public class MainView extends javax.swing.JFrame {
         Image editImage = editIcon.getImage();
         scaledImage = editImage.getScaledInstance((int)(create.getWidth() / 1.2), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);
         edit.setIcon(new ImageIcon(scaledImage));
+        
+        Image logoutImage = logoutIcon.getImage();
+        scaledImage = logoutImage.getScaledInstance((int)(logout.getWidth() / 1.2), (int)(logout.getHeight() / 1.2), Image.SCALE_SMOOTH);
+        logout.setIcon(new ImageIcon(scaledImage));
         
         delete.setBorder(new RightButtonBorder(Color.WHITE, 1));
         create.setBorder(new MidButtonBorder(Color.WHITE, 1));
@@ -349,6 +362,8 @@ public class MainView extends javax.swing.JFrame {
         terminal = new javax.swing.JTextArea();
         leftPanel = new javax.swing.JPanel();
         save = new javax.swing.JButton();
+        logout = new javax.swing.JButton();
+        adminModeLabel = new javax.swing.JLabel();
         edit = new javax.swing.JButton();
 
         createMenu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -445,15 +460,26 @@ public class MainView extends javax.swing.JFrame {
         leftPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         leftPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        save.setBackground(new java.awt.Color(243, 243, 243));
-        save.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        save.setBackground(new java.awt.Color(0, 0, 0));
+        save.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        save.setForeground(new java.awt.Color(255, 255, 255));
         save.setText("Guardar Cambios");
+        save.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveActionPerformed(evt);
             }
         });
-        leftPanel.add(save, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 130, 40));
+        leftPanel.add(save, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 140, 30));
+
+        logout.setBackground(new java.awt.Color(0, 0, 0));
+        logout.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        leftPanel.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 30, 30));
+
+        adminModeLabel.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        adminModeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        adminModeLabel.setText("Modo:");
+        leftPanel.add(adminModeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 520, 160, -1));
 
         jPanel1.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 540));
 
@@ -670,13 +696,14 @@ public class MainView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainView(SDsize).setVisible(true);
+                new MainView(adminMode).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTree JTree;
+    private javax.swing.JLabel adminModeLabel;
     private javax.swing.JButton create;
     private javax.swing.JMenuItem createDir;
     private javax.swing.JMenuItem createFile;
@@ -687,6 +714,7 @@ public class MainView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel leftPanel;
+    private javax.swing.JButton logout;
     private javax.swing.JTextField pathOutput;
     private javax.swing.JButton save;
     private javax.swing.JTextArea terminal;

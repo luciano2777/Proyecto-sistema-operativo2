@@ -4,6 +4,7 @@
  */
 package Classes;
 
+import GUI.LoginView;
 import GUI.MainView;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,8 +28,11 @@ public class Main {
         
         
         
-        MainView mv = new MainView(20);
-        mv.setVisible(true);
+//        MainView mv = new MainView(20);
+//        mv.setVisible(true);
+        
+        LoginView lv = new LoginView();
+        lv.setVisible(true);
 
         
 

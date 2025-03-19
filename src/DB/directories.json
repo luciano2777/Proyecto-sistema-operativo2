@@ -1,1 +1,1 @@
-{"name":"root","files":{"head":{"data":{"name":"a.file","size":3,"firstBlock":{"avaible":false,"next":1},"backup":{"size":0}}},"tail":{"data":{"name":"a.file","size":3,"firstBlock":{"avaible":false,"next":1},"backup":{"size":0}}},"size":1},"directories":{"size":0}}
+{"name":"root","files":{"tail":{"data":{"name":"f1.file","size":5,"firstBlock":{"avaible":true},"backup":{"size":0}}},"size":0},"directories":{"size":0}}
