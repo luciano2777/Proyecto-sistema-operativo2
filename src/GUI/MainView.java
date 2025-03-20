@@ -339,7 +339,20 @@ public class MainView extends javax.swing.JFrame {
         drawTree();        
         
     }
-    
+    public void RestoreFile(){
+        terminal.setEditable(false);
+        
+        terminal.setText("");                
+        String name = outputs.get(0);  
+        String path = pathOutput.getText();
+        outputs.delete();       
+        
+        String result = fileSystem.editFile(name, path);
+        terminal.setText(result);
+        pathOutput.setText("root/");
+        drawTree();        
+        
+    }
     
     public void editDir(){
         terminal.setEditable(false);
@@ -384,6 +397,7 @@ public class MainView extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         table = new javax.swing.JButton();
         edit = new javax.swing.JButton();
+        Restore = new javax.swing.JButton();
 
         createMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -433,7 +447,7 @@ public class MainView extends javax.swing.JFrame {
                 pathOutputActionPerformed(evt);
             }
         });
-        jPanel1.add(pathOutput, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 590, 30));
+        jPanel1.add(pathOutput, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 560, 30));
 
         create.setBackground(new java.awt.Color(0, 0, 0));
         create.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
@@ -532,6 +546,14 @@ public class MainView extends javax.swing.JFrame {
             }
         });
         jPanel1.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, 30, 30));
+
+        Restore.setText("jButton2");
+        Restore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RestoreActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Restore, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 0, 30, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -722,6 +744,43 @@ public class MainView extends javax.swing.JFrame {
         tableView.setVisible(true);
     }//GEN-LAST:event_tableActionPerformed
 
+    private void RestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestoreActionPerformed
+        // TODO add your handling code here:
+        try {
+
+        inputs.delete();
+        terminal.setEditable(false);
+        terminal.setCaretColor(Color.WHITE);
+        
+        if(pathOutput.getText().isBlank() && !pathOutput.getText().contains(".file")){
+            terminal.setText("No hay ninguna ruta seleccionada");
+            return;
+        }
+        System.out.println(pathOutput.getText());
+        String input;
+        Restaurar restaurar = new Restaurar(terminal, fileSystem,pathOutput.getText());
+        restaurar.setVisible(true);
+        if(pathOutput.getText().contains(".file")){
+            instruction = EDIT_FILE;
+            
+            input = "Ingrese una version anterior desde la ventana: ";
+            
+            
+        }
+        else{
+               
+            input = "Error: "; 
+            return;
+        }
+//        input += restaurar.GetCombo();
+        inputs.append(input);                            
+        handleInput();
+        }
+        catch(Exception e){
+            terminal.setText("No hay ninguna ruta seleccionada");
+        }
+    }//GEN-LAST:event_RestoreActionPerformed
+    
     /**
      * @param args the command line arguments
      */
@@ -759,6 +818,7 @@ public class MainView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTree JTree;
+    private javax.swing.JButton Restore;
     private javax.swing.JLabel adminModeLabel;
     private javax.swing.JButton create;
     private javax.swing.JMenuItem createDir;

@@ -32,12 +32,15 @@ public class JFile {
     }
 
     public void setName(String name) {
+        JFile archivo = new JFile(this.name,this.size, this.color, this.firstBlock);
+        backup.append(archivo);
         if(!name.contains(".file")){
             this.name = name + ".file";            
         }
         else{
             this.name = name;            
         }
+        
     }
 
     public int getSize() {
