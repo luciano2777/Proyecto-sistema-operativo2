@@ -8,7 +8,10 @@ import Classes.Util;
 import DataStructures.List;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.concurrent.Semaphore;
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 /**
@@ -28,6 +31,11 @@ public class LoginView extends javax.swing.JFrame {
         initComponents();        
         init();
         this.setLocationRelativeTo(null);
+        
+        //Iniciar icono de la App
+        String sp = File.separator;
+        ImageIcon appIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"fileSystemIcon.png").normalize().toString());
+        setIconImage(appIcon.getImage());
     }
     
     public void init(){
@@ -78,6 +86,7 @@ public class LoginView extends javax.swing.JFrame {
         terminal = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         background.setBackground(new java.awt.Color(255, 255, 255));
         background.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());

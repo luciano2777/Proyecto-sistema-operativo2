@@ -135,10 +135,12 @@ public class MainView extends javax.swing.JFrame {
             create.setEnabled(true);
             delete.setEnabled(true);
             edit.setEnabled(true);            
+            backup.setEnabled(true);            
             
             ImageIcon createIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"plus.png").normalize().toString());
             ImageIcon deleteIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"minus.png").normalize().toString());
             ImageIcon editIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"edit.png").normalize().toString());
+            ImageIcon backupIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"backup.png").normalize().toString());
             
             //Icono crear
             Image createImage = createIcon.getImage();
@@ -154,6 +156,11 @@ public class MainView extends javax.swing.JFrame {
             Image editImage = editIcon.getImage();
             scaledImage = editImage.getScaledInstance((int)(create.getWidth() / 1.2), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);        
             edit.setIcon(new ImageIcon(scaledImage));
+            
+            //Icono backup
+            Image backupImage = backupIcon.getImage();
+            scaledImage = backupImage.getScaledInstance((int)(create.getWidth() / 1.2), (int)(create.getHeight() / 1.2), Image.SCALE_SMOOTH);        
+            backup.setIcon(new ImageIcon(scaledImage));
         }
         
         //Si modo usuario
@@ -162,12 +169,14 @@ public class MainView extends javax.swing.JFrame {
             create.setEnabled(false);
             delete.setEnabled(false);
             edit.setEnabled(false);
+            backup.setEnabled(false);
         }
         
         //Crear bordes para los botones
         delete.setBorder(new RightButtonBorder(Color.WHITE, 1));
         create.setBorder(new MidButtonBorder(Color.WHITE, 1));
-        edit.setBorder(new LeftButtonBorder(Color.WHITE, 1));
+        edit.setBorder(new MidButtonBorder(Color.WHITE, 1));
+        backup.setBorder(new LeftButtonBorder(Color.WHITE, 1));
         
         
         //Iniciar el nuevo TreeRender
@@ -412,10 +421,10 @@ public class MainView extends javax.swing.JFrame {
         save = new javax.swing.JButton();
         logout = new javax.swing.JButton();
         adminModeLabel = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        blocks = new javax.swing.JButton();
         table = new javax.swing.JButton();
         edit = new javax.swing.JButton();
-        Restore = new javax.swing.JButton();
+        backup = new javax.swing.JButton();
 
         createMenu.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -470,6 +479,14 @@ public class MainView extends javax.swing.JFrame {
         create.setBackground(new java.awt.Color(0, 0, 0));
         create.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         create.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        create.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                createMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                createMouseExited(evt);
+            }
+        });
         create.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createActionPerformed(evt);
@@ -480,6 +497,14 @@ public class MainView extends javax.swing.JFrame {
         delete.setBackground(new java.awt.Color(0, 0, 0));
         delete.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         delete.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        delete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                deleteMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                deleteMouseExited(evt);
+            }
+        });
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteActionPerformed(evt);
@@ -516,6 +541,14 @@ public class MainView extends javax.swing.JFrame {
         save.setForeground(new java.awt.Color(255, 255, 255));
         save.setText("Guardar Cambios");
         save.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        save.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                saveMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                saveMouseExited(evt);
+            }
+        });
         save.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveActionPerformed(evt);
@@ -525,6 +558,14 @@ public class MainView extends javax.swing.JFrame {
 
         logout.setBackground(new java.awt.Color(0, 0, 0));
         logout.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                logoutMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                logoutMouseExited(evt);
+            }
+        });
         logout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logoutActionPerformed(evt);
@@ -535,29 +576,59 @@ public class MainView extends javax.swing.JFrame {
         adminModeLabel.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         adminModeLabel.setForeground(new java.awt.Color(255, 255, 255));
         adminModeLabel.setText("Modo:");
-        leftPanel.add(adminModeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 520, 160, -1));
+        leftPanel.add(adminModeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 150, -1));
 
-        jButton1.setText("Ver bloques");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        blocks.setBackground(new java.awt.Color(0, 0, 0));
+        blocks.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        blocks.setForeground(new java.awt.Color(255, 255, 255));
+        blocks.setText("Ver bloques");
+        blocks.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                blocksMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                blocksMouseExited(evt);
             }
         });
-        leftPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
+        blocks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                blocksActionPerformed(evt);
+            }
+        });
+        leftPanel.add(blocks, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 170, 30));
 
+        table.setBackground(new java.awt.Color(0, 0, 0));
+        table.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        table.setForeground(new java.awt.Color(255, 255, 255));
         table.setText("Tabla");
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tableMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                tableMouseExited(evt);
+            }
+        });
         table.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tableActionPerformed(evt);
             }
         });
-        leftPanel.add(table, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, -1, -1));
+        leftPanel.add(table, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 170, 30));
 
         jPanel1.add(leftPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 540));
 
         edit.setBackground(new java.awt.Color(0, 0, 0));
         edit.setFont(new java.awt.Font("Segoe UI Semilight", 1, 12)); // NOI18N
         edit.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        edit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                editMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                editMouseExited(evt);
+            }
+        });
         edit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editActionPerformed(evt);
@@ -565,13 +636,21 @@ public class MainView extends javax.swing.JFrame {
         });
         jPanel1.add(edit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 0, 30, 30));
 
-        Restore.setText("jButton2");
-        Restore.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RestoreActionPerformed(evt);
+        backup.setBackground(new java.awt.Color(0, 0, 0));
+        backup.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                backupMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                backupMouseExited(evt);
             }
         });
-        jPanel1.add(Restore, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 0, 30, 30));
+        backup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backupActionPerformed(evt);
+            }
+        });
+        jPanel1.add(backup, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 0, 30, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -753,17 +832,17 @@ public class MainView extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_logoutActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void blocksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blocksActionPerformed
         BlocksView blocksView = new BlocksView(fileSystem);
         blocksView.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_blocksActionPerformed
 
     private void tableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableActionPerformed
         TableView tableView = new TableView(fileSystem);
         tableView.setVisible(true);
     }//GEN-LAST:event_tableActionPerformed
 
-    private void RestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestoreActionPerformed
+    private void backupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backupActionPerformed
         
         try {
             inputs.delete();
@@ -803,7 +882,103 @@ public class MainView extends javax.swing.JFrame {
             terminal.setText("No hay ninguna ruta seleccionada");
         }
         
-    }//GEN-LAST:event_RestoreActionPerformed
+    }//GEN-LAST:event_backupActionPerformed
+
+    private void deleteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseEntered
+        if(adminMode){
+            delete.setBackground(new Color(0, 0, 204));            
+        }
+    }//GEN-LAST:event_deleteMouseEntered
+
+    private void deleteMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseExited
+        if(adminMode){
+            delete.setBackground(Color.BLACK);            
+        }
+    }//GEN-LAST:event_deleteMouseExited
+
+    private void createMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createMouseEntered
+        if(adminMode){
+            create.setBackground(new Color(0, 0, 204));            
+        }        
+    }//GEN-LAST:event_createMouseEntered
+
+    private void createMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createMouseExited
+        if(adminMode){
+            create.setBackground(Color.BLACK);            
+        }
+    }//GEN-LAST:event_createMouseExited
+
+    private void editMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseEntered
+        if(adminMode){
+            edit.setBackground(new Color(0, 0, 204));            
+        }
+    }//GEN-LAST:event_editMouseEntered
+
+    private void editMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseExited
+        if(adminMode){
+            edit.setBackground(Color.BLACK);            
+        }
+    }//GEN-LAST:event_editMouseExited
+
+    private void backupMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backupMouseEntered
+        if(adminMode){
+            backup.setBackground(new Color(0, 0, 204));            
+        }
+    }//GEN-LAST:event_backupMouseEntered
+
+    private void backupMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backupMouseExited
+        if(adminMode){
+            backup.setBackground(Color.BLACK);            
+        }
+    }//GEN-LAST:event_backupMouseExited
+
+    private void saveMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseEntered
+        if(adminMode){
+            save.setBackground(new Color(0, 0, 204));            
+        }
+    }//GEN-LAST:event_saveMouseEntered
+
+    private void saveMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseExited
+        if(adminMode){
+            save.setBackground(Color.BLACK);            
+        }
+    }//GEN-LAST:event_saveMouseExited
+
+    private void logoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseEntered
+        if(adminMode){
+            logout.setBackground(new Color(0, 0, 204));            
+        }
+    }//GEN-LAST:event_logoutMouseEntered
+
+    private void logoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseExited
+        if(adminMode){
+            logout.setBackground(Color.BLACK);            
+        }
+    }//GEN-LAST:event_logoutMouseExited
+
+    private void blocksMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_blocksMouseEntered
+        if(adminMode){
+            blocks.setBackground(new Color(0, 0, 204));            
+        }
+    }//GEN-LAST:event_blocksMouseEntered
+
+    private void blocksMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_blocksMouseExited
+        if(adminMode){
+            blocks.setBackground(Color.BLACK);            
+        }
+    }//GEN-LAST:event_blocksMouseExited
+
+    private void tableMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseEntered
+        if(adminMode){
+            table.setBackground(new Color(0, 0, 204));            
+        }
+    }//GEN-LAST:event_tableMouseEntered
+
+    private void tableMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseExited
+        if(adminMode){
+            table.setBackground(Color.BLACK);            
+        }
+    }//GEN-LAST:event_tableMouseExited
     
     /**
      * @param args the command line arguments
@@ -842,15 +1017,15 @@ public class MainView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTree JTree;
-    private javax.swing.JButton Restore;
     private javax.swing.JLabel adminModeLabel;
+    private javax.swing.JButton backup;
+    private javax.swing.JButton blocks;
     private javax.swing.JButton create;
     private javax.swing.JMenuItem createDir;
     private javax.swing.JMenuItem createFile;
     private javax.swing.JPopupMenu createMenu;
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

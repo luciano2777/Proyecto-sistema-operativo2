@@ -18,8 +18,9 @@ public class JFile {
     private Integer[] color;
     private List<String> backup;
 
-    public JFile(String name, int size, Integer[] color, Integer firstBlock) {
-        this.name = name + ".file";        
+    public JFile(String name, String path, int size, Integer[] color, Integer firstBlock) {
+        this.name = name + ".file";  
+        this.path = path;
         this.size = size;
         this.firstBlock = firstBlock;
         this.color = color;

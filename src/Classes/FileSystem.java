@@ -164,7 +164,9 @@ public class FileSystem {
         
         Integer[] color = Util.getRandomColor();
         Integer firstBlock = assignBlock(size, color);
-        JFile newFile = new JFile(name, size, color, firstBlock);  
+        
+        String path = parentPathDirectory + name + "/" ;
+        JFile newFile = new JFile(name, path, size, color, firstBlock);  
         
         if(firstBlock == null){            
             return "No hay espacio disponible en el dispositivo de almacenamiento";
@@ -204,7 +206,7 @@ public class FileSystem {
             return "Ruta no valida";
         }
                 
-        JFile file = getFile(path);
+        JFile file = getFile(path);        
         Block firstBlock = SD[file.getFirstBlock()];
         
         //Liberar el archivo de todos los bloques
@@ -236,7 +238,7 @@ public class FileSystem {
         //Eliminar de la lista de archivos
         for (int i = 0; i < files.getSize(); i++) {
             JFile auxFile = files.get(i);
-            if(auxFile.getName().equals(file.getName())){
+            if(auxFile.getPath().equals(file.getPath())){
                 files.pop(i);
             }
         }
@@ -375,6 +377,7 @@ public class FileSystem {
         List<JFile> directoryFiles = directory.getFiles();        
         
         //Borrar todos los archivos del directorio
+        Integer[] defaultColor = {255, 255, 255};
         for (int i = 0; i < directoryFiles.getSize(); i++) {
             JFile file = directoryFiles.get(i);            
             
@@ -382,12 +385,15 @@ public class FileSystem {
             
             while(block != null){
                 block.setAvaible(true);
+                block.setColor(defaultColor);
 
                 if(block.getNext() == null){
                     block = null;
                 }
                 else{
-                    block = SD[block.getNext()];                        
+                    Integer next = block.getNext();
+                    block.setNext(null);
+                    block = SD[next];                        
                 }                    
             }                        
         }

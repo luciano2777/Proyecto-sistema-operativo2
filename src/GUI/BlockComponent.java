@@ -66,6 +66,7 @@ public class BlockComponent extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         next = new javax.swing.JLabel();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         background.setBackground(new java.awt.Color(255, 255, 255));
@@ -77,7 +78,7 @@ public class BlockComponent extends javax.swing.JPanel {
 
         add(background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 70, 50));
 
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setBackground(new java.awt.Color(239, 239, 239));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         next.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N

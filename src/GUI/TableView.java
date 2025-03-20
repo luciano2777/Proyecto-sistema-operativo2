@@ -10,6 +10,9 @@ import Classes.JFile;
 import DataStructures.List;
 import java.awt.Color;
 import java.awt.Component;
+import java.io.File;
+import java.nio.file.Paths;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -28,7 +31,12 @@ public class TableView extends javax.swing.JFrame {
         
         initComponents();
         drawTable();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);                
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);     
+        
+        //Iniciar icono de la App
+        String sp = File.separator;
+        ImageIcon appIcon = new ImageIcon(Paths.get("src"+sp+"Assets"+sp+"fileSystemIcon.png").normalize().toString());
+        setIconImage(appIcon.getImage());
     }
     
     private void drawTable(){
@@ -39,8 +47,7 @@ public class TableView extends javax.swing.JFrame {
         tableModel.addColumn("IDX bloque inicial");
         tableModel.addColumn("Color");
         
-        List<JFile> files = fileSystem.getFiles();
-        System.out.println(files);
+        List<JFile> files = fileSystem.getFiles();        
         for (int i = 0; i < files.getSize(); i++) {
             JFile file = files.get(i);
             tableModel.addRow(new Object[]{
@@ -74,10 +81,18 @@ public class TableView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        background = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        background.setBackground(new java.awt.Color(0, 19, 66));
+        background.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        background.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jScrollPane1.setBackground(new java.awt.Color(0, 15, 36));
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -92,21 +107,26 @@ public class TableView extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(table);
 
+        background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 55, 480, 280));
+
+        jLabel1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Tabla de bloques");
+        background.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 531, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -148,6 +168,8 @@ public class TableView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel background;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
