@@ -32,6 +32,25 @@ public class BlockComponent extends javax.swing.JPanel {
     public Dimension getPreferredSize() {
         return new Dimension(100, 50); // Ajusta el tamaño según tus necesidades
     }
+    
+     public static Color calculateLabelColor(Color color) {
+        int red = color.getRed();
+        int green = color.getGreen();
+        int blue = color.getBlue();
+
+        // Calcular la luminosidad
+        double brightness = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+
+        // Definir el umbral
+        int threshold = 128;
+
+        // Determinar el color del texto
+        if (brightness < threshold) {
+            return Color.WHITE; // Color de texto blanco para fondos oscuros
+        } else {
+            return Color.BLACK; // Color de texto negro para fondos claros
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,6 +71,7 @@ public class BlockComponent extends javax.swing.JPanel {
         background.setBackground(new java.awt.Color(255, 255, 255));
         background.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        blockID.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         blockID.setText("num");
         background.add(blockID, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, 30));
 
@@ -60,6 +80,7 @@ public class BlockComponent extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        next.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         next.setText("Next");
         jPanel2.add(next, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 30, 30));
 
@@ -69,7 +90,9 @@ public class BlockComponent extends javax.swing.JPanel {
 
     public void setBackgroundColor(Integer[] color) {
         if(color != null){
-            this.background.setBackground(new Color(color[0], color[1], color[2]));            
+            this.background.setBackground(new Color(color[0], color[1], color[2]));   
+            Color labelColor = calculateLabelColor(new Color(color[0], color[1], color[2]));
+            blockID.setForeground(labelColor);
         }
     }
     

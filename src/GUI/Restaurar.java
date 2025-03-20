@@ -22,27 +22,27 @@ public class Restaurar extends javax.swing.JFrame {
      * Creates new form Restaurar
      */
     public Restaurar(JTextArea terminal, FileSystem fileSystem, String path) {
-        System.out.println(path);
-        initComponents();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  
-        JFile jfile = fileSystem.getFile(path);
-        List<JFile> backupList = jfile.getBackup();
-        System.out.println(backupList.get(0));
-        for(int i = 0; i <=backupList.getSize() -1; i++ ){
-            System.out.println(backupList.get(i).getName());
-            backups.addItem(i+":"+backupList.get(i).getName().replace(".file", "")); //Por alguna razon se produce dos .file en el string asi que esto lo reemplaza
-            
-        }
-        backups.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Perform your desired action here
-                String selectedBackup = (String) backups.getSelectedItem();
-                System.out.println("Selected backup: " + selectedBackup);
-                terminal.setText("Ingrese una version anterior desde la ventana: " +selectedBackup.split(":")[1].trim());
-                // You can add more code here to handle the selected item
-            }
-        });
+//        System.out.println(path);
+//        initComponents();
+//        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  
+//        JFile jfile = fileSystem.getFile(path);
+//        List<String> backupList = jfile.getBackup();
+//        System.out.println(backupList.get(0));
+//        for(int i = 0; i <=backupList.getSize() -1; i++ ){
+//            System.out.println(backupList.get(i).getName());
+//            backups.addItem(i+":"+backupList.get(i).getName().replace(".file", "")); //Por alguna razon se produce dos .file en el string asi que esto lo reemplaza
+//            
+//        }
+//        backups.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                // Perform your desired action here
+//                String selectedBackup = (String) backups.getSelectedItem();
+//                System.out.println("Selected backup: " + selectedBackup);
+//                terminal.setText("Ingrese una version anterior desde la ventana: " +selectedBackup.split(":")[1].trim());
+//                // You can add more code here to handle the selected item
+//            }
+//        });
         
     }
 

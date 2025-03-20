@@ -37,6 +37,11 @@ public class Util {
         }
     }
     
+    
+    public static boolean inRange(int value, int options){        
+        return (value >= 1 && value <= options);
+    }
+    
     public static Integer[] getRandomColor() {
         Random random = new Random();
         int rojo = random.nextInt(256); // Genera un valor aleatorio entre 0 y 255

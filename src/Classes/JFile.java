@@ -5,7 +5,6 @@
 package Classes;
 
 import DataStructures.List;
-import java.awt.Color;
 
 /**
  *
@@ -17,7 +16,7 @@ public class JFile {
     private int size;    
     private Integer firstBlock;  
     private Integer[] color;
-    private List<JFile> backup;
+    private List<String> backup;
 
     public JFile(String name, int size, Integer[] color, Integer firstBlock) {
         this.name = name + ".file";        
@@ -32,8 +31,6 @@ public class JFile {
     }
 
     public void setName(String name) {
-        JFile archivo = new JFile(this.name,this.size, this.color, this.firstBlock);
-        backup.append(archivo);
         if(!name.contains(".file")){
             this.name = name + ".file";            
         }
@@ -51,13 +48,13 @@ public class JFile {
         this.size = size;
     }
 
-    public List<JFile> getBackup() {
+    public List<String> getBackup() {
         return backup;
     }
 
-    public void setBackup(List<JFile> backup) {
+    public void setBackup(List<String> backup) {
         this.backup = backup;
-    }
+    }   
 
     public String getPath() {
         return path;

@@ -268,6 +268,7 @@ public class FileSystem {
             }
         }
         
+        file.getBackup().append(file.getName());
         file.setName(name);
         return "Archivo editado exitosamente";
     }
@@ -435,8 +436,27 @@ public class FileSystem {
             }
         }
         
-        directory.setName(name);
+        directory.setName(name);        
         return "Archivo editado exitosamente";
+    }
+    
+    
+    public String restoreFile(String path, int option){
+        
+        if(!path.contains(".file")){
+            return "Ruta no valida";
+        }
+        
+        JFile file = getFile(path);
+        
+        List<String> backup = file.getBackup();
+        String newName = backup.pop(option-1);
+        
+        file.getBackup().append(file.getName());
+        file.setName(newName);
+        return "Restauracion completada";
+        
+        
     }
     
         

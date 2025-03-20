@@ -43,13 +43,17 @@ public class MainView extends javax.swing.JFrame {
     private List<String> inputs = new List();
     private List<String> outputs = new List();
     private Semaphore sem = new Semaphore(1);
+    private int instruction = -1;
+    
+    //Constantes
     private final int CREATE_FILE = 0;
     private final int CREATE_DIR = 1;
     private final int DELETE_FILE = 2;
     private final int DELETE_DIR = 3;
     private final int EDIT_FILE = 4;
     private final int EDIT_DIR = 5;
-    private int instruction = -1;
+    private final int RESTORE_FILE = 6;
+    
     
     public MainView(boolean adminMode) {
         this.adminMode = adminMode;
@@ -222,6 +226,9 @@ public class MainView extends javax.swing.JFrame {
                     case EDIT_DIR -> {
                         editDir();
                     }
+                    case RESTORE_FILE -> {
+                        restoreFile();
+                    }
                         
                 }
             }
@@ -339,20 +346,7 @@ public class MainView extends javax.swing.JFrame {
         drawTree();        
         
     }
-    public void RestoreFile(){
-        terminal.setEditable(false);
-        
-        terminal.setText("");                
-        String name = outputs.get(0);  
-        String path = pathOutput.getText();
-        outputs.delete();       
-        
-        String result = fileSystem.editFile(name, path);
-        terminal.setText(result);
-        pathOutput.setText("root/");
-        drawTree();        
-        
-    }
+            
     
     public void editDir(){
         terminal.setEditable(false);
@@ -367,6 +361,30 @@ public class MainView extends javax.swing.JFrame {
         pathOutput.setText("root/");
         drawTree();        
         
+    }
+    
+    
+    public void restoreFile(){
+        terminal.setEditable(false);
+        
+        terminal.setText("");                
+        String option = outputs.get(0);  
+        String path = pathOutput.getText();
+        
+        
+        JFile file = fileSystem.getFile(path);
+        System.out.println(option);
+        if(!Util.isNumeric(option) || !Util.inRange(Integer.parseInt(option), file.getBackup().getSize())){
+            terminal.setText("Entrada no valida");
+            return;
+        }
+                
+        String result = fileSystem.restoreFile(path, Integer.parseInt(option));
+        
+        outputs.delete();                       
+        terminal.setText(result);
+        pathOutput.setText("root/");
+        drawTree();                
     }
     
 
@@ -674,6 +692,7 @@ public class MainView extends javax.swing.JFrame {
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
         Util.save(fileSystem);
+        terminal.setText("Cambios guardados con exito!");
     }//GEN-LAST:event_saveActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
@@ -745,40 +764,45 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_tableActionPerformed
 
     private void RestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestoreActionPerformed
-        // TODO add your handling code here:
-        try {
-
-        inputs.delete();
-        terminal.setEditable(false);
-        terminal.setCaretColor(Color.WHITE);
         
-        if(pathOutput.getText().isBlank() && !pathOutput.getText().contains(".file")){
-            terminal.setText("No hay ninguna ruta seleccionada");
-            return;
-        }
-        System.out.println(pathOutput.getText());
-        String input;
-        Restaurar restaurar = new Restaurar(terminal, fileSystem,pathOutput.getText());
-        restaurar.setVisible(true);
-        if(pathOutput.getText().contains(".file")){
-            instruction = EDIT_FILE;
+        try {
+            inputs.delete();
+            terminal.setEditable(false);
+            terminal.setCaretColor(Color.WHITE);
+
+            if(pathOutput.getText().isBlank()){
+                terminal.setText("No hay ninguna ruta seleccionada");
+                return;
+            }
             
-            input = "Ingrese una version anterior desde la ventana: ";
+            if(!pathOutput.getText().contains(".file")){
+                terminal.setText("Ruta seleccionada no valida");
+                return;
+            }
+                                                           
+            instruction = RESTORE_FILE;
+
+            List<String> backup = fileSystem.getFile(pathOutput.getText()).getBackup();
+            if(backup.isEmpty()){
+                terminal.setText("No hay versiones anteriores del archivo");
+                return;
+            }
             
-            
-        }
-        else{
-               
-            input = "Error: "; 
-            return;
-        }
-//        input += restaurar.GetCombo();
-        inputs.append(input);                            
-        handleInput();
+            String input = "Versiones anteriores \n";
+            for (int i = 0; i < backup.getSize(); i++) {
+                String fileName = backup.get(i);
+                input += "\n" + (i+1) + ". " + fileName;
+            }
+            input += "\n\nIngrese el numero de la opcion deseada: ";
+
+            inputs.append(input);
+            handleInput();
+                                                     
         }
         catch(Exception e){
             terminal.setText("No hay ninguna ruta seleccionada");
         }
+        
     }//GEN-LAST:event_RestoreActionPerformed
     
     /**
