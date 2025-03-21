@@ -4,6 +4,7 @@
  */
 package Classes;
 
+import DataStructures.List;
 import GUI.LoginView;
 import GUI.MainView;
 import java.nio.file.Path;
@@ -33,6 +34,15 @@ public class Main {
         
         LoginView lv = new LoginView();
         lv.setVisible(true);
+
+//        List<Integer> list = new List();
+//        
+//        list.append(6);
+//        list.append(7);
+//        list.append(4);
+//        list.append(2);
+//        
+//        System.out.println(list);
 
         
 

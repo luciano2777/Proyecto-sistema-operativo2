@@ -81,7 +81,7 @@ public class List<T> {
      * Agrega un nodo al final de la lista
      * @param data Dato a agregar en la lista
      */
-    public void append(T data){
+    public void append(T data){        
         Node<T> newNode = new Node(data);
         if(isEmpty()){
             this.head = this.tail = newNode;
@@ -310,7 +310,7 @@ public class List<T> {
     public void reeplace(T dataA, T dataB){
         if(!isEmpty()){
             Node<T> pointer = this.head;
-            for (int i = 0; i < lastIndex(); i++) {
+            for (int i = 0; i < size; i++) {
                 if(pointer.getData() == dataA){
                     pointer.setData(dataB);
                 }                
@@ -327,11 +327,9 @@ public class List<T> {
      */
     public List<T> copy(){
         List<T> newList = new List();
-        if(!isEmpty()){
-            Node<T> pointer = this.head;
-            for (int i = 0; i < lastIndex(); i++) {
-                newList.append(pointer.getData());
-                pointer = pointer.getNext();
+        if(!isEmpty()){                        
+            for (int i = 0; i < size; i++) {
+                newList.append(get(i));                
             }
         }
         return newList;
@@ -347,15 +345,10 @@ public class List<T> {
             return "[]";
         }
         
-        String listStr = "["; 
-        Node<T> pointer = this.head;
-        for (int i = 0; i < this.size; i++) {
-            if(i == lastIndex()){
-                listStr += pointer.getData() + "]";
-            }
-            else{
-                listStr += pointer.getData() + ", ";                
-            }
+        String listStr = ""; 
+        Node<T> pointer = this.head;        
+        for (int i = 0; i < size; i++) {
+            listStr += pointer.getData();
             pointer = pointer.getNext();
         }
         return listStr;

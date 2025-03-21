@@ -48,6 +48,7 @@ public class TableView extends javax.swing.JFrame {
         tableModel.addColumn("Color");
         
         List<JFile> files = fileSystem.getFiles();        
+        System.out.println(files);
         for (int i = 0; i < files.getSize(); i++) {
             JFile file = files.get(i);
             tableModel.addRow(new Object[]{

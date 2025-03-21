@@ -148,11 +148,7 @@ public class FileSystem {
             block.setAvaible(false);            
             pointer = SD[idx];
         }
-        pointer.setColor(color);
-        
-        for(Block block: SD){
-            System.out.println(block);
-        }
+        pointer.setColor(color);        
         
         return firstBlock;
     }  
@@ -165,7 +161,7 @@ public class FileSystem {
         Integer[] color = Util.getRandomColor();
         Integer firstBlock = assignBlock(size, color);
         
-        String path = parentPathDirectory + name + "/" ;
+        String path = parentPathDirectory + name + ".file/" ;
         JFile newFile = new JFile(name, path, size, color, firstBlock);  
         
         if(firstBlock == null){            
@@ -180,15 +176,18 @@ public class FileSystem {
             }
         }
                 
-        parentDirectory.addFile(newFile);
-        files.append(newFile);
-        
+        parentDirectory.addFile(newFile);        
+//        List<JFile> newFilesList = files.copy();
+//        newFilesList.append(newFile);
+//        files = newFilesList;
+        files.append(newFile);           
+        System.out.println(files);        
         
         return "Archivo creado exitosamente";
     }
     
     
-    public String deleteFile(String path){        
+    public String deleteFile(String path){          
         if(!path.contains(".file")){            
             return "Ruta no valida";
         }
@@ -224,8 +223,7 @@ public class FileSystem {
             firstBlock = nextBlock;
         }
         
-        //Eliminar el archivo del directorio   
-                        
+        //Eliminar el archivo del directorio                           
         Directory parentDirectory = getDirectory(parentPath);           
         
         for (int i = 0; i < parentDirectory.getFiles().getSize(); i++) {
@@ -234,7 +232,7 @@ public class FileSystem {
                 parentDirectory.getFiles().pop(i);
             }
         }
-        
+                
         //Eliminar de la lista de archivos
         for (int i = 0; i < files.getSize(); i++) {
             JFile auxFile = files.get(i);
@@ -363,7 +361,7 @@ public class FileSystem {
     
     
     
-    public String deleteDirectory(String path){
+    public String deleteDirectory(String path){        
         if(path.equals("root/")){            
             return "No se puede eliminar el directorio raiz";
         }
@@ -380,9 +378,17 @@ public class FileSystem {
         Integer[] defaultColor = {255, 255, 255};
         for (int i = 0; i < directoryFiles.getSize(); i++) {
             JFile file = directoryFiles.get(i);            
+                           
+            //Eliminar de la lista de archivos
+            for (int j = 0; j < files.getSize(); j++) {                
+                JFile auxFile = files.get(j);
+                if(auxFile.getPath().equals(file.getPath())){
+                    files.pop(j);
+                }
+            }
             
-            Block block = SD[file.getFirstBlock()];
-            
+            //Eliminar de los bloques
+            Block block = SD[file.getFirstBlock()];            
             while(block != null){
                 block.setAvaible(true);
                 block.setColor(defaultColor);
@@ -397,6 +403,7 @@ public class FileSystem {
                 }                    
             }                        
         }
+        
         
         directoryFiles.delete();
         

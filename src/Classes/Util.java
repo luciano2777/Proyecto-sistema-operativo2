@@ -125,6 +125,7 @@ public class Util {
     private static void saveFiles(List<JFile> files) throws IOException{
         Gson gson = new Gson();
         
+        System.out.println(files);
         String SDJson = gson.toJson(files);
         
         String sp = File.separator;
@@ -146,7 +147,10 @@ public class Util {
         try (FileReader reader = new FileReader(path)) {
             Type fileListType = new TypeToken<List<JFile>>() {}.getType();
             List<JFile> files = gson.fromJson(reader, fileListType);
-            return files;
+            
+            List<JFile> copyFiles = files.copy();
+            
+            return copyFiles;
         } catch (IOException e) {
             e.printStackTrace();
         }
