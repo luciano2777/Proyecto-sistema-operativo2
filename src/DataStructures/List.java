@@ -12,14 +12,12 @@ package DataStructures;
  */
 public class List<T> {
     //Atributos
-    private Node<T> head;
-    private Node<T> tail;
+    private Node<T> head;    
     private int size;
 
     //Constructor 1: Creacion de una lista vacia
     public List() {
-        this.head = null;
-        this.tail = null;
+        this.head = null;        
         this.size = 0;
     }
     
@@ -39,14 +37,6 @@ public class List<T> {
         this.head = head;
     }
 
-    public Node getTail() {
-        return tail;
-    }
-
-    public void setTail(Node tail) {
-        this.tail = tail;
-    }
-
     public int getSize() {
         return size;
     }        
@@ -57,17 +47,9 @@ public class List<T> {
      * Elimina todos los nodos de la lista 
      */
     public void delete(){
-        this.head = this.tail = null;
+        this.head = null;
         this.size = 0;
-    }
-    
-    /***
-     * Devuelve el ultimo indice de la lista
-     * @return 
-     */
-    public int lastIndex(){
-        return this.size - 1;
-    }
+    }    
     
     /***
      * Retorna si la lista esta vacia
@@ -84,11 +66,15 @@ public class List<T> {
     public void append(T data){        
         Node<T> newNode = new Node(data);
         if(isEmpty()){
-            this.head = this.tail = newNode;
+            this.head = newNode;
         }
         else{
-            this.tail.setNext(newNode);
-            this.tail = newNode;
+            Node pointer = this.head;
+            while(pointer.getNext() != null){
+                pointer = pointer.getNext();
+            }
+            
+            pointer.setNext(newNode);
         }
         this.size++;
     }
@@ -100,7 +86,7 @@ public class List<T> {
     public void preappend(T data){
         Node<T> newNode = new Node(data);
         if(isEmpty()){
-            this.head = this.tail = newNode;
+            this.head = newNode;
         }
         else{
             newNode.setNext(this.head);
@@ -161,15 +147,15 @@ public class List<T> {
      */
     public T removeTail(){
         if(!isEmpty()){
-            T data = this.tail.getData();
+            
             Node<T> pointer = this.head;
-            for (int i = 0; i < lastIndex()-1; i++) {
+            while(pointer.getNext().getNext() != null){
                 pointer = pointer.getNext();
             }
-            Node<T> newTail = pointer;
-
-            this.tail = newTail;
-            this.tail.setNext(null);
+            
+            T data = (T) pointer.getNext().getData();
+            pointer.setNext(null);
+            
             this.size--;            
             return data;
         }
@@ -188,14 +174,14 @@ public class List<T> {
         if(isEmpty()){
             System.err.println("List error: Empty list");
         }
-        else if(idx < 0 || idx > lastIndex()){            
+        else if(idx < 0 || idx > size-1){            
             System.err.println("List error: Index " + Integer.toString(idx) + " out of range");
         }
         else{
             if(idx == 0){
                 return removeHead();
             }
-            else if(idx == lastIndex()){
+            else if(idx == size-1){
                 return removeTail();
             }
             else{
@@ -214,43 +200,8 @@ public class List<T> {
         return null;
     }
     
-            /***
-     * Elimina elementos de una lista de strings dado una string
-     * @param string indice del elemento a eliminar
-     * @return retorna el elemento eliminado                             
-     */
-    public T popString(String string){ //Solo funciona para listas de String
-        if(isEmpty()){
-            System.err.println("List error: Empty list");
-        }
-        else{
-            int size = this.size;
-            for (int i = 0; i < this.size   ; ) { //agarra la primera fila y va eliminado los elementos que se encuentran en esta
-                System.out.println(this.get(i));
-                if(this.get(i).equals(string)){
-                    
-                    this.pop(i);
-                    
-                }
-                else{ //Si la primera fila ya ha sido eliminada y el elemento es diferente al introducido pasa aa la siguiente. 
-                    i++;
-                }
-                
-                
-                
-        }
-            //Esto es innecesario y puede ser borrado.
-        if(this.head.getData().equals(string)){
-                 System.out.println("execute");
-                 removeHead();
-            }
-         if(this.getTail().getData().equals(string)){
-                 removeTail();
-            }
-        
-    }
-        return null;
-    }
+
+
     
     /***
      * Obtiene el elemento de la lista dado el indice
@@ -261,19 +212,16 @@ public class List<T> {
         if(isEmpty()){
             System.err.println("List error: Empty list");
         }
-        else if(idx < 0 || idx > lastIndex()){
+        else if(idx < 0 || idx > size-1){
             System.err.println("List error: Index " + Integer.toString(idx) + " out of range");
         }
         else{
             if(idx == 0){
                 return this.head.getData();
             }
-            else if(idx == lastIndex()){
-                return this.tail.getData();
-            }
             else{
                 Node<T> pointer = this.head;
-                for (int i = 0; i < idx; i++) {
+                for (int i = 0; i < idx; i++) {                    
                     pointer = pointer.getNext();
                 }
                 return pointer.getData();
@@ -348,57 +296,12 @@ public class List<T> {
         String listStr = ""; 
         Node<T> pointer = this.head;        
         for (int i = 0; i < size; i++) {
-            listStr += pointer.getData();
+            listStr += pointer.getData() + " ";
             pointer = pointer.getNext();
         }
         return listStr;
     }
 
-    public int FindString(String string){ //Solo funciona para listas de String
-        if(isEmpty()){
-            System.err.println("List error: Empty list");
-        }
-        else{
-            int size = this.size;
-            for (int i = 0; i < this.size   ; ) { //agarra la primera fila y va buscando los elementos que se encuentran en esta
-                System.out.println(this.get(i));
-                if(this.get(i).equals(string)){
-                    return i;
-                }
-                else{ //pasa aa la siguiente. 
-                    i++;
-                }
-                
-                
-                
-        }
-        }
-        return 0;
-        
-    }
     
-    public T ChangeString(String string, String cambiar){ //Solo funciona para listas de String
-        if(isEmpty()){
-            System.err.println("List error: Empty list");
-        }
-        else{
-            int size = this.size;
-            Node<T> pointer = this.head;
-            for (int i = 0; i < size   ; i++) { //agarra la primera fila y va eliminado los elementos que se encuentran en esta
-                
-                if(pointer.getData().toString().equals(string)){
-                    System.out.println("afirmativo");
-                    pointer.setData((T) cambiar);
-                   
-                }
-                else{ //Si la primera fila ya ha sido eliminada y el elemento es diferente al introducido pasa aa la siguiente. 
-                    
-                    
-                }
-                pointer = pointer.getNext();
-                
-                
-        }
-        }return null;
-}
+
 }

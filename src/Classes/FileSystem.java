@@ -177,11 +177,8 @@ public class FileSystem {
         }
                 
         parentDirectory.addFile(newFile);        
-//        List<JFile> newFilesList = files.copy();
-//        newFilesList.append(newFile);
-//        files = newFilesList;
-        files.append(newFile);           
-        System.out.println(files);        
+        files.append(newFile);          
+        
         
         return "Archivo creado exitosamente";
     }

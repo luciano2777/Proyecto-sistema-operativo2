@@ -83,6 +83,7 @@ public class MainView extends javax.swing.JFrame {
                 
         while(!dirQueue.isEmpty()){
             Directory currentDirectory = dirQueue.dequeue();
+            System.out.println(currentDirectory.getName());
                         
             List<Directory> currentDirectories = currentDirectory.getDirectories();
             List<JFile> currentFiles = currentDirectory.getFiles();

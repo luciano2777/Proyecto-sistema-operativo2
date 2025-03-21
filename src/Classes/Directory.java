@@ -56,6 +56,7 @@ public class Directory {
     
     public void addFile(JFile file){
         this.files.append(file);
+        System.out.println(this.files);
     }
     
     public void addDirectory(Directory directory){
@@ -71,7 +72,6 @@ public class Directory {
     }
 
     
-
     @Override
     public String toString() {
         return name;

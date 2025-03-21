@@ -21,28 +21,10 @@ public class Main {
      */
     public static void main(String[] args) {
         
-        
-//        FileSystem fs = new FileSystem(10);
-//        fs.createDirectory("d1", "root");
-//        fs.createFile("File1", 3, "root/d1");
-//        System.out.println(fs.getRoot().getDirectories().get(0).getFiles().get(0).getName());
-        
-        
-        
-//        MainView mv = new MainView(20);
-//        mv.setVisible(true);
-        
         LoginView lv = new LoginView();
         lv.setVisible(true);
 
-//        List<Integer> list = new List();
-//        
-//        list.append(6);
-//        list.append(7);
-//        list.append(4);
-//        list.append(2);
-//        
-//        System.out.println(list);
+
 
         
 

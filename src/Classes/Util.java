@@ -6,6 +6,8 @@ package Classes;
 
 import Assets.ColorTypeAdapter;
 import DataStructures.List;
+import DataStructures.Queue;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -53,37 +55,35 @@ public class Util {
     }
     
     
-    private static void saveDir(Directory root) throws IOException{
+    private static void saveDir(Directory root) throws IOException{          
         Gson gson = new Gson();
-        
-        String dirJson = gson.toJson(root);
+        String rootJson = gson.toJson(root);                
         
         String sp = File.separator;
         String path = Paths.get("src"+sp+"DB"+sp+"directories.json").normalize().toString();
         
         try (FileWriter writer = new FileWriter(path)) {
-            writer.write(dirJson);
+            writer.write(rootJson);
             
         } catch (IOException e) {
             e.printStackTrace();
-        }        
+        }
     }
     
     
     private static Directory loadDir(){
-        Gson gson = new Gson();
-        
+        Gson gson = new Gson();        
+
         String sp = File.separator;
         String path = Paths.get("src"+sp+"DB"+sp+"directories.json").normalize().toString();
-        try (FileReader reader = new FileReader(path)) {
-            
+        
+        try (FileReader reader = new FileReader(path)) {            
             Directory root = gson.fromJson(reader, Directory.class);
             return root;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
         return null;
     }
     
@@ -122,17 +122,20 @@ public class Util {
     }
     
     
-    private static void saveFiles(List<JFile> files) throws IOException{
-        Gson gson = new Gson();
+    private static void saveFiles(List<JFile> files) throws IOException{        
+        JFile[] filesArray = new JFile[files.getSize()];
+        for (int i = 0; i < files.getSize(); i++) {
+            filesArray[i] = files.get(i);
+        }
         
-        System.out.println(files);
-        String SDJson = gson.toJson(files);
+        Gson gson = new Gson();                
+        String filesJson = gson.toJson(filesArray);
         
         String sp = File.separator;
         String path = Paths.get("src"+sp+"DB"+sp+"files.json").normalize().toString();
         
         try (FileWriter writer = new FileWriter(path)) {
-            writer.write(SDJson);
+            writer.write(filesJson);
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,15 +147,21 @@ public class Util {
         Gson gson = new Gson();
         String sp = File.separator;
         String path = Paths.get("src" + sp + "DB" + sp + "files.json").normalize().toString();
-        try (FileReader reader = new FileReader(path)) {
-            Type fileListType = new TypeToken<List<JFile>>() {}.getType();
-            List<JFile> files = gson.fromJson(reader, fileListType);
+        
+        try (FileReader reader = new FileReader(path)) {            
+            JFile[] files = gson.fromJson(reader, JFile[].class);
             
-            List<JFile> copyFiles = files.copy();
+            List<JFile> filesList = new List();
+            if(files != null){
+                for (JFile file : files) {
+                    filesList.append(file);
+                }                
+            }
             
-            return copyFiles;
-        } catch (IOException e) {
-            e.printStackTrace();
+            return filesList;
+        } 
+        catch (IOException e) {
+            
         }
         return null;
     }
